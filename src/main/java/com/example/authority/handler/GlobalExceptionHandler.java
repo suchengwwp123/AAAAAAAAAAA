@@ -6,6 +6,7 @@ import cn.dev33.satoken.util.SaResult;
 import com.example.authority.common.Result;
 import com.example.authority.exception.EmailException;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,13 +14,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import cn.hutool.core.io.IORuntimeException;
 
 /**
- * @program: authority-2026.0.13
+ * @program: authority-2026.0.23
  * @ClassName:GlobalExceptionHandler
  * @description: 全局异常拦截
  * @author:dyy
  * @Version 3.0
  **/
 @RestControllerAdvice
+@Hidden
 @Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler(SaTokenException.class)

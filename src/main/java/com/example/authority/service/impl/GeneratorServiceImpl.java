@@ -287,7 +287,7 @@ public class GeneratorServiceImpl implements GeneratorService {
                 .globalConfig(builder -> {
                     builder
                             .disableOpenDir()
-                            .fileOverride()// 覆盖已生成文件
+                            // 覆盖已生成文件
                             .enableSwagger()//启动swagger模式
                             .outputDir(System.getProperty("user.dir") + "/src/main/java/"); // 指定输出目录
                 })

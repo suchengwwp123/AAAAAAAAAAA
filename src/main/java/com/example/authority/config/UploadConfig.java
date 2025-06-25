@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * @program: authority-2026.0.1
+ * @program: authority-2026.0.2
  * @ClassName:UploadConfig
  * @description: 文件上传配置类
  * @author:dyy

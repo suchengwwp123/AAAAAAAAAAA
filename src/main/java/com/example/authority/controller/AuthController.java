@@ -51,7 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * @program: authority-2026.0.1
+ * @program: authority-2026.0.2
  * @ClassName:AuthController
  * @description: 认证处理控制器
  * @author:dyy

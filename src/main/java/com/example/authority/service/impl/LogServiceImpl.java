@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 
 /**
- * @program: authority-2026.0.1
+ * @program: authority-2026.0.2
  * @ClassName:LogServiceImpl
  * @description: 操作日志 service实现类
  * @author:dyy

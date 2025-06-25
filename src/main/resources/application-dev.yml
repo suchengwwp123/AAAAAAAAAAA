@@ -6,11 +6,11 @@ server:
 
 spring:
   application:
-    name: authority-2026.0.1
+    name: authority-2026.0.2
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost:3306/authority-2026.0.1?allowPublicKeyRetrieval=true&useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/authority-2026.0.2?allowPublicKeyRetrieval=true&useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: root
     password: root
     # 以下是druid配置
@@ -88,8 +88,6 @@ spring:
             #本地测试，先放开ssl
             enable: true
             required: false
-
-
   data:
     # redis配置
     redis:
@@ -114,7 +112,11 @@ spring:
           # 连接池中的最小空闲连接
           min-idle: 0
 
-
+  springdoc:
+    api-docs:
+      enabled: true # 开启OpenApi接口
+    swagger-ui:
+      enabled: true # 开启swagger界面，依赖OpenApi，需要OpenApi同时开启
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml

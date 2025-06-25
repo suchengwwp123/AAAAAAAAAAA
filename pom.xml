@@ -5,7 +5,8 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.4</version>
+        <version>3.5.0</version>
+
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
@@ -16,6 +17,18 @@
     <properties>
         <java.version>17</java.version>
     </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-bom</artifactId>
+                <version>3.5.12</version>
+                <type>pom</type>
+                <scope>import</scope>
+
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <!--Spring-Mvc        -->
         <dependency>
@@ -33,7 +46,25 @@
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <scope>runtime</scope>
+            <version>8.3.0</version>
+        </dependency>
+
+
+        <!-- mybatis-plus代码生成器       -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+        </dependency>
+        <!--  Mybatis——Plus 插件    -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
+        </dependency>
+        <!--  Mybatis——Plus     -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+
         </dependency>
         <!--LomBok        -->
         <dependency>
@@ -47,12 +78,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- mybatis-plus代码生成器       -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
-            <version>3.5.3.2</version>
-        </dependency>
+
         <!--模板        -->
         <dependency>
             <groupId>org.apache.velocity</groupId>
@@ -71,12 +97,7 @@
             <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
             <version>2.1.0</version>
         </dependency>
-        <!--  Mybatis——Plus     -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.5.3.2</version>
-        </dependency>
+
         <!--  Hutool工具包      -->
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -89,6 +110,11 @@
             <artifactId>annotations</artifactId>
             <version>13.0</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>9.0.1.Final</version>
         </dependency>
         <!-- Sa-Token 权限认证，在线文档：https://sa-token.cc -->
         <dependency>
@@ -141,12 +167,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
-        <!--判断sql语句        -->
-        <dependency>
-            <groupId>com.github.jsqlparser</groupId>
-            <artifactId>jsqlparser</artifactId>
-            <version>4.6</version>
-        </dependency>
+
 
     </dependencies>
 

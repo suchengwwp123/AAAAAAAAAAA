@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * @program: authority-2026.0.1
+ * @program: authority-2026.0.2
  * @ClassName:RegisterDto
  * @description: 注册使用的实体Dto
  * @author:dyy

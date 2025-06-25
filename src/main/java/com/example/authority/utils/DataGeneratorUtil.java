@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class DataGeneratorUtil {
 
     private static final String datasource = "com.mysql.cj.jdbc.Driver";
-    private static final String url = "jdbc:mysql://127.0.0.1:3306/authority-2026.0.1";
+    private static final String url = "jdbc:mysql://127.0.0.1:3306/authority-2026.0.2";
     private static final String username = "root";
     private static final String password = "root";
     private static final String path =System.getProperty("user.dir")+"/src/main/resources/static/doc/";

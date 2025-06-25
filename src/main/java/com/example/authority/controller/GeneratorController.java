@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * @program: authority-2026.0.1
+ * @program: authority-2026.0.2
  * @ClassName:GeneratorController
  * @description: 代码生成器前端控制器
  * @author:dyy

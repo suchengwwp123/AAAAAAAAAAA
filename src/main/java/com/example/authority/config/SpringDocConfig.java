@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @program: authority-2026.0.1
+ * @program: authority-2026.0.2
  * @ClassName:SpringDocConfig
  * @description: 接口文档SwaagerUI的配置类
  * 主要是配置Swaager页面的一些页面介绍参数等等
@@ -24,7 +24,7 @@ public class SpringDocConfig {
         return new OpenAPI()
                 .info(new Info().title("后台系统")
                         .description("代码！")
-                        .version("v3.1.0")
+                        .version("v2026")
                         .license(new License().name("").url("")));
     }
 

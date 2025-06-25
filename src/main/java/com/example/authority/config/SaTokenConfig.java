@@ -19,7 +19,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * @program: authority-2026.0.1
+ * @program: authority-2026.0.2
  * @ClassName:SaTokenConfig
  * @description: [Sa-Token 权限认证] 配置类
  * @author:dyy

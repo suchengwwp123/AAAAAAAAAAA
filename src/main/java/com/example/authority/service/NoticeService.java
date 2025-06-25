@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 
 /**
- * @program: authority-2026.0.1
+ * @program: authority-2026.0.2
  * @ClassName: NoticeService
  * @description: 系统公告 service
  * @author:dyy

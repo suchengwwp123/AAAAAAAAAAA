@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * @program: authority-2026.0.1
+ * @program: authority-2026.0.2
  * @ClassName:PermissionServiceImpl
  * @description: 菜单表 service实现类
  * @author:dyy

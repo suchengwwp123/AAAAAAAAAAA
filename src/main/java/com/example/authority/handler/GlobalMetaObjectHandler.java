@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 /**
- * @program: authority-2026.0.13
+ * @program: authority-2026.0.23
  * @ClassName:GlobalMetaObjectHandler
  * @description: 全局自动填充处理器
  * @author:dyy
@@ -24,7 +24,7 @@ public class GlobalMetaObjectHandler implements MetaObjectHandler {
      */
     @Override
     public void insertFill(MetaObject metaObject) {
-        log.info("start insert fill");
+//        log.info("start insert fill");
         //添加时候自动填充 setFieldValByName三个参数为：映射类字段，填充值，原对象
         // setFieldValByName(String fieldName, Object fieldVal, MetaObject metaObject)
         //给createTime这个字段和updateTime这俩字段 来一个什么值呢 来一个自动插入时间 传一个数据 这个数据就是mataObject
@@ -39,7 +39,7 @@ public class GlobalMetaObjectHandler implements MetaObjectHandler {
      */
     @Override
     public void updateFill(MetaObject metaObject) {
-        log.info("start update fill");
+//        log.info("start update fill");
         this.setFieldValByName("updateTime", LocalDateTime.now(), metaObject);
 
     }

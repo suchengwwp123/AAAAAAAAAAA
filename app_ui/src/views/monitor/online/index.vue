@@ -160,7 +160,7 @@ const handlechangeDialog = (value) => {
             :current-page="pageNum"
             :page-size="pageSize"
             :page-sizes="[10, 20, 30, 50, 100, 500, 1000]"
-            small="small"
+
             layout="total, sizes, prev, pager, next, jumper"
             :total="Number(total)"
             @size-change="handleSizeChange"

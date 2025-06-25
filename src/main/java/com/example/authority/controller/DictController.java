@@ -28,7 +28,7 @@ import com.example.authority.entity.Dict;
 
 
 /**
- * @program: authority-2026.0.1
+ * @program: authority-2026.0.2
  * @ClassName:DictController
  * @description: DictController前端控制器
  * @author:dyy

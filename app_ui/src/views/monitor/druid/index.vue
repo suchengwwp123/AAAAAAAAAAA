@@ -9,7 +9,7 @@
       height="100%"
       allow="fullscreen"
       referrerpolicy="no-referrer"
-      sandbox="allow-forms allow-scripts allow-same-origin allow-top-navigation-by-user-activation"
+      sandbox=" allow-scripts allow-forms allow-scripts allow-same-origin allow-top-navigation-by-user-activation"
 
   >
   </iframe>
