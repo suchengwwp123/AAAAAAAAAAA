@@ -1,0 +1,26 @@
+/* just override what you need */
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+$colors: (
+  'primary': (
+    'base': #3a60ff, // 更深更亮的钴蓝，主色力强
+  ),
+  'success': (
+    'base': #2fb670, // 加深的青绿，更具视觉重量
+  ),
+  'warning': (
+    'base': #f89f1f, // 橘黄调加深，更具提示性
+  ),
+  'danger': (
+    'base': #e53958, // 深莓红，优雅又有压迫感
+  ),
+  'error': (
+    'base': #d92121, // 饱和番茄红，比原生红更“准”
+  ),
+  'info': (
+    'base': #258eea, // 深湖蓝，显稳重、极具现代感
+  ),
+)
+
+);
+
+@use "element-plus/theme-chalk/src/index.scss" as *;

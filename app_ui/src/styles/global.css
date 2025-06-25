@@ -1,0 +1,64 @@
+
+/*弹框自定义样式*/
+.el-drawer {
+
+
+    .el-drawer__footer {
+        padding: 0px;
+        border-top: 1px solid #f0f0f0; /* 顶部浅灰色细线 */
+        .el-drawer__footer-container--line {
+            padding: 10px;
+        }
+    }
+}
+
+
+/*表格通用样式*/
+.page {
+
+    .el-select{
+        min-width: 200px!important;
+    }
+    /**
+    查询表单外边距统一样式
+     */
+
+    .el-form--inline .el-form-item {
+        margin-right: 10px;
+    }
+
+    /**
+    新增修改等按钮样式布局
+     */
+
+    .page-operate--layout {
+        margin-bottom: 10px;
+        display: flex;
+        gap: 10px
+    }
+
+    /*
+    表格宽度
+    */
+
+    .page-table {
+        width: 100%;
+        /**
+        修改删除布局
+         */
+
+        .page-table-editout--layout {
+            display: flex;
+            justify-content: center;
+            gap: 10px
+        }
+    }
+
+    /**
+    分页样式
+     */
+
+    .page-pagination {
+        margin-top: 10px;
+    }
+}

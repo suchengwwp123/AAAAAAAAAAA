@@ -1,0 +1,563 @@
+<script setup>
+import {onBeforeMount, reactive, ref} from 'vue'
+import {
+  CircleCloseFilled,
+  Delete,
+  Download,
+  Edit,
+  InfoFilled,
+  Plus,
+  Refresh,
+  Search,
+  Upload
+} from '@element-plus/icons-vue'
+import request from '@/utils/request'
+import {ElMessage, ElMessageBox} from 'element-plus'
+
+import downloadExcel from '@/utils/downloads'
+import {MdEditor} from 'md-editor-v3';
+import 'md-editor-v3/lib/style.css';
+import router from "@/router";
+
+const $route = router
+onBeforeMount(async () => {
+  if ($route.currentRoute.value.query.pid) {
+    pid.value = $route.currentRoute.value.query.pid
+    await load()
+  } else {
+    $route.go(-1)
+  }
+
+})
+
+// 弹框头部名称
+const headerTitle = ref()
+// 当前页数
+const pageNum = ref(1)
+// 每页展示量
+const pageSize = ref(10)
+// 分页数据总数
+const total = ref(0)
+// 表格数据
+const tableData = ref([])
+// 批量选择的数组
+const multipleSelection = ref([])
+// 是否禁用按钮
+const disabled = ref(true)
+// 是否展示弹框
+const dialogVisible = ref(false)
+// 定义关联列表
+//定义查询值
+//   nameList
+const name = ref('')
+const pid = ref('')
+//   identificationList
+const identification = ref('')
+//   statuList
+const statu = ref('')
+//   pidList
+
+// 表单数据定义
+const form = reactive({
+  id: undefined,
+  name: undefined,
+  identification: undefined,
+  statu: 1,
+  des: undefined,
+  assignments: undefined,
+  sorts: 1,
+  pid: 0,
+  createTime: undefined,
+})
+// 父级表单
+const parentForm = reactive({
+  id: undefined,
+  name: undefined,
+  identification: undefined,
+  statu: 1,
+  des: undefined,
+  assignments: undefined,
+  sorts: 1,
+  pid: 0,
+  createTime: undefined,
+})
+
+// 遍历多图片上传
+
+
+// 表单样式
+const formSize = ref('default')
+// 表单ref标识数据
+const ruleFormRef = ref()
+// 自定义校验规则
+
+// 表单校验规则
+const rules = reactive({
+
+  name: [{required: true, message: '必选项不能为空', trigger: 'blur'}],
+
+  identification: [{required: true, message: '必选项不能为空', trigger: 'blur'}],
+
+  statu: [{required: true, message: '必选项不能为空', trigger: 'blur'}],
+
+  des: [{required: true, message: '必选项不能为空', trigger: 'blur'}],
+
+  assignments: [{required: true, message: '必选项不能为空', trigger: 'blur'}],
+
+  sorts: [{required: true, message: '必选项不能为空', trigger: 'change'}],
+})
+
+//新增方法
+const handleAdd = async () => {
+  headerTitle.value = reactive('新增字典')
+  dialogVisible.value = true
+}
+// 修改方法
+const handleUpdate = async (id) => {
+  dialogVisible.value = true
+  headerTitle.value = reactive('编辑字典')
+  const res = await request.get(`/dict/${id}`)
+  Object.assign(form, res.data)
+
+
+}
+// 单个删除方法
+const handleDel = async (id) => {
+  await request.delete(`/dict/${id}`)
+  ElMessage({
+    showClose: true,
+    message: '删除成功',
+    type: 'success'
+  })
+  await load()
+}
+// 批量删除方法
+const handleBatchDel = async () => {
+  const ids = []
+  multipleSelection.value.forEach((row) => {
+    ids.push(row.id)
+  })
+  await request.delete(`/dict/batch/${ids}`)
+  ElMessage({
+    showClose: true,
+    message: '批量删除成功',
+    type: 'success'
+  })
+  await load()
+}
+
+// 分页查询方法（初始化方法，页面加载成功以后就调用的方法）
+const load = async () => {
+  const res = await request.get('/dict/page', {
+    params: {
+
+      pageNum: pageNum.value,
+      pageSize: pageSize.value,
+      name: name.value,
+      identification: identification.value,
+      statu: statu.value,
+      pid: pid.value,
+    }
+  })
+  pageNum.value = res.data.current
+  pageSize.value = res.data.size
+  total.value = res.data.total
+  tableData.value = res.data.records
+  const rep = await request.get(`/dict/${pid.value}`)
+  Object.assign(parentForm, rep.data)
+}
+
+
+// 清空查询数据重置方法
+const handleReset = () => {
+  name.value = ''
+  identification.value = ''
+  statu.value = ''
+
+  load()
+}
+// 修改每页展示的数据量方法
+const handleSizeChange = (size) => {
+  pageSize.value = size
+  load()
+}
+// 翻页方法
+const handleCurrentChange = (current) => {
+  pageNum.value = current
+  load()
+}
+// 多选按钮处理方法
+const handleSelectionChange = (val) => {
+  multipleSelection.value = val
+  disabled.value = val.length === 0
+}
+
+// 关闭弹框提示方法
+const handleClose = (done) => {
+  ElMessageBox.confirm('确定关闭窗口?')
+      .then(() => {
+        handleResetForm(ruleFormRef.value)
+      })
+      .then(() => {
+        done()
+      })
+      .catch(() => {
+        // catch error
+      })
+}
+
+
+// 提交表单校验方法
+const handleSubmitForm = async (formEl) => {
+  if (!formEl) return
+
+
+  await formEl.validate(async (valid, fields) => {
+
+    form.pid = parentForm.id
+    if (valid) {
+      await request({
+        method: form.id ? 'put' : 'post',
+        url: form.id ? `/dict/${form.id}` : '/dict',
+        data: form
+      })
+      ElMessage({
+        showClose: true,
+        message: '操作成功',
+        type: 'success'
+      })
+      await handleResetForm(formEl)
+    } else {
+      console.log('error submit!', fields)
+    }
+  })
+}
+// 批量导入读数据写到后端数据库中
+const beforeBatchUpload = async (file) => {
+  let fd = new FormData()
+  fd.append('file', file)
+  await request.post('/dict/batch/upload', fd, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+  ElMessage({
+    showClose: true,
+    message: '上传成功',
+    type: 'success'
+  })
+  await load()
+}
+// 批量导出方法
+const handleBatchExport = async () => {
+  const ids = multipleSelection.value.map((row) => row.id)
+  const res = await request(
+      {
+        url: `/dict/batch/export/${ids}`,
+        method: 'get',
+        responseType: 'blob'
+      } //在请求中加上这一行，特别重要
+  )
+  downloadExcel(res, '导出数据表')
+}
+// 取消弹框方法
+const handleResetForm = async (formEl) => {
+  if (!formEl) return
+  formEl.resetFields()
+
+  Object.assign(form,
+      {
+        id: undefined,
+        name: undefined,
+        identification: undefined,
+        statu: 1,
+        des: undefined,
+        assignments: undefined,
+        sorts: 1,
+        pid: 0,
+        createTime: undefined,
+      }
+  )
+  // formEl.clearValidate("img")
+  dialogVisible.value = false
+  await load()
+}
+
+// 文件上传方法
+
+// 文件下载
+const dowload = async (url) => {
+  window.open(url)
+}
+// 富文本文件上传
+const onUploadImg = async (files, callback) => {
+  let i = 0;
+  const res = await Promise.all(
+      files.map((file) => {
+
+        if (i > 0) {
+
+          return false
+        }
+        return new Promise((rev, rej) => {
+          const formdata = new FormData();
+          formdata.append('file', file);
+
+          request
+              .post('/file/upload', formdata, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                }
+              })
+              .then((res) => {
+                i++
+                rev(res.data)
+              })
+              .catch((error) => rej(error));
+        });
+
+      })
+  );
+  callback(res);
+}
+
+
+</script>
+<template>
+  <!--  编辑弹框-->
+  <el-drawer
+      :modelValue="dialogVisible"
+      :title="headerTitle"
+      append-to-body
+      :before-close="handleClose"
+      size="40%"
+  >
+
+    <el-form
+        ref="ruleFormRef"
+        :model="form"
+        :rules="rules"
+        label-width="120px"
+        class="ruleForm"
+        :size="formSize"
+        status-icon
+    >
+
+      <el-form-item label="标签名称" prop="name">
+        <el-input v-model="form.name"/>
+      </el-form-item>
+
+      <el-form-item label="标签键值" prop="assignments">
+        <el-input v-model="form.assignments"/>
+      </el-form-item>
+      <el-form-item label="排序" prop="sorts">
+        <el-input-number :min="1" v-model="form.sorts"/>
+      </el-form-item>
+      <el-form-item label="当前状态" prop="statu">
+        <el-switch
+            v-model="form.statu"
+            :active-value="1"
+            :inactive-value="0"
+            inline-prompt
+            active-text="正常"
+            inactive-text="停用"
+            style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
+        />
+      </el-form-item>
+
+      <el-form-item label="标签描述" prop="des">
+        <el-input v-model="form.des" type="textarea"/>
+      </el-form-item>
+
+
+    </el-form>
+    <template #footer>
+      <div class="el-drawer__footer-container--line">
+        <el-button @click="handleResetForm(ruleFormRef)">取消</el-button>
+        <el-button type="primary" @click="handleSubmitForm(ruleFormRef)"> 提交</el-button>
+      </div>
+    </template>
+  </el-drawer>
+
+  <el-row
+      class="page"
+  >
+
+    <el-page-header
+        @back="$route.go(-1)"
+    >
+      <template
+          #content
+      >
+        <div class="page-header">
+          <el-text
+              type="primary"
+          >
+            {{ parentForm.identification }}
+          </el-text>
+        </div>
+      </template>
+    </el-page-header>
+    <!--  分页查询表单按钮-->
+    <el-col
+
+        v-permission="'sys:dict:detail:search'"
+    >
+      <el-form :inline="true">
+        <!--        查询输入框-->
+        <el-row>
+          <el-col>
+
+
+            <el-form-item label-width="5px">
+              <el-input v-model="name" placeholder="输入标签名称"/>
+            </el-form-item>
+
+
+
+
+            <!--            <el-form-item label-width="5px">-->
+            <!--              <el-input v-model="pid" placeholder="输入父级目录"/>-->
+            <!--            </el-form-item>-->
+
+            <el-form-item label-width="5px">
+              <el-radio-group
+
+                  v-model="statu"
+              >
+                <el-radio-button
+                    label="1" value="1"
+                >正常
+                </el-radio-button>
+                <el-radio-button
+                    label="0" value="0"
+                >停用
+                </el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+
+
+            <!--        查询按钮 and 重置按钮-->
+            <el-form-item label-width="5px">
+              <el-button type="primary" :icon="Search" @click="load">查询</el-button>
+              <el-button type="warning" :icon="Refresh" @click="handleReset">重置</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+      </el-form>
+    </el-col>
+    <!-- 新增和批量按钮 -->
+    <el-col class="page-operate--layout">
+      <!--   新增   -->
+      <div v-permission="'sys:dict:detail:add'">
+        <el-button type="primary" :icon="Plus" @click="handleAdd" size="small" plain
+        >新增
+        </el-button>
+      </div>
+
+      <!--   批量删除   -->
+      <div v-permission="'sys:dict:detail:batch:delete'">
+        <el-popconfirm
+            confirm-button-text="确定"
+            cancel-button-text="取消"
+            :icon="InfoFilled"
+            icon-color="#626AEF"
+            title="确认要批量删除吗？"
+            @confirm="handleBatchDel"
+            @cancel="load"
+        >
+          <template #reference>
+            <el-button type="danger" :disabled="disabled" :icon="Delete" size="small" plain
+            >批量删除
+            </el-button>
+          </template>
+        </el-popconfirm>
+      </div>
+
+
+    </el-col>
+    <!--  表格页面-->
+    <el-col>
+      <el-table
+          :data="tableData"
+          class="page-table"
+          :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
+          @selection-change="handleSelectionChange"
+      >
+        <el-table-column type="selection" width="55"/>
+        <el-table-column type="index" label="序号" width="55" align="center" sortable/>
+        <el-table-column prop="name" label="标签名称"  show-overflow-tooltip/>
+
+
+        <el-table-column prop="des" label="标签描述" />
+        <el-table-column prop="assignments" label="键值" align="center"/>
+        <el-table-column prop="sorts" label="排序" align="center" sortable/>
+        <el-table-column prop="statu" label="当前状态" align="center">
+          <template
+              #default="scope"
+          >
+            <el-tag
+                :type="scope.row.statu===0?'danger':'success'"
+            >{{ scope.row.statu === 0 ? '停用' : '正常' }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="createTime" label="创建时间" align="center"/>
+
+        <el-table-column label="操作" align="center">
+          <template #default="scope">
+            <div class="page-table-editout--layout">
+              <div
+                  v-permission="'sys:dict:detail:update'"
+              >
+                <el-button
+                    type="primary"
+                    :icon="Edit"
+                    size="small"
+                    @click="handleUpdate(scope.row.id)"
+
+                >编辑
+                </el-button>
+              </div>
+              <div v-permission="'sys:dict:detail:delete'">
+                <el-popconfirm
+                    confirm-button-text="确定"
+                    cancel-button-text="取消"
+                    :icon="InfoFilled"
+                    icon-color="#626AEF"
+                    title="确认要删除吗？"
+                    @confirm="handleDel(scope.row.id)"
+                    @cancel="load"
+                >
+                  <template #reference>
+                    <el-button type="danger" :icon="Delete" size="small">删除</el-button>
+                  </template>
+                </el-popconfirm>
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!--      分页按钮-->
+      <div class="page-pagination">
+        <el-pagination
+            :current-page="pageNum"
+            :page-size="pageSize"
+            :page-sizes="[10, 20, 30, 50, 100, 500, 1000]"
+            small="small"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="Number(total)"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+        />
+      </div>
+    </el-col>
+  </el-row>
+</template>
+
+<style scoped lang="scss">
+.page-header {
+  margin-bottom: 5px;
+}
+</style>
