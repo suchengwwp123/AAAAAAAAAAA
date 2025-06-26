@@ -45,6 +45,7 @@ public class SaTokenConfig implements WebMvcConfigurer {
                 addExclude("/cache/**")
                 .addExclude("/file/**").
                 addExclude("/auth/register")
+                .addExclude("/ai/**")
                 .addExclude("/auth/public-key")
                 .addExclude("/auth/email/**")
                 .addExclude("/auth/islogin")

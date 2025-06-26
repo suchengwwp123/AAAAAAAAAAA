@@ -19,23 +19,37 @@
     </properties>
     <dependencyManagement>
         <dependencies>
+            <!--            Mybatis-Plus 依赖管理-->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-bom</artifactId>
                 <version>3.5.12</version>
                 <type>pom</type>
                 <scope>import</scope>
-
             </dependency>
+            <!--            SpringAi 依赖管理-->
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>1.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
+
     <dependencies>
         <!--Spring-Mvc        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
+        <!--     ollama   -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-model-ollama</artifactId>
+        </dependency>
         <!--        获取cpu参数-->
         <dependency>
             <groupId>com.github.oshi</groupId>
