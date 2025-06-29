@@ -1,8 +1,9 @@
 package com.example.authority.controller;
 
-import com.example.authority.service.DeepSeekService;
+import com.example.authority.service.AiService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
@@ -10,24 +11,31 @@ import reactor.core.publisher.Flux;
 @RestController
 @RequestMapping("/ai")
 public class AiController {
-    @Resource
-    private DeepSeekService deepSeekService;
 
-    @PostMapping("/chat")
-    public String search(@RequestBody String prompt) {
-        return deepSeekService.search(prompt);
-    }
+    @Resource
+    private AiService aiService;
 
 
     /**
      * 流式输出
+     * 自定义模型
+     * 自定义深度思考
      *
+     * @param modelType
      * @param prompt
+     * @param deepThink
      * @return
      */
-    @GetMapping(value = "/stream/{prompt}",produces="text/html;charset=UTF-8")
-    public Flux<String> stream(@PathVariable String prompt) {
-        return deepSeekService.stream(prompt);
+    @GetMapping(value = "/stream/{modelType}/{prompt}/{deepThink}", produces = "text/html;charset=UTF-8")
+    public Flux<String> stream(
+
+            @PathVariable String modelType,
+            @PathVariable String prompt,
+            @PathVariable boolean deepThink
+    ) {
+
+        return
+                aiService.chat(modelType, prompt, deepThink);
     }
 
 }

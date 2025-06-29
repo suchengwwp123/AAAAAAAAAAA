@@ -1,6 +1,6 @@
 <script setup>
 import {onMounted, onUnmounted, ref} from 'vue'
-import {DataLine, Expand, Fold, FullScreen, InfoFilled, Loading, Setting} from '@element-plus/icons-vue'
+import {ChatDotRound, DataLine, Expand, Fold, FullScreen, InfoFilled, Loading, Setting} from '@element-plus/icons-vue'
 import useSystemStore from '@/stores/system'
 import router from '@/router'
 import pinia from '@/stores/store'
@@ -8,6 +8,7 @@ import request from '@/utils/request'
 import {ElMessage, ElMessageBox} from "element-plus";
 import {useDark, useToggle} from "@vueuse/core";
 import TabbarSettings from './settings/index.vue'
+import AiChat from "@/layout/tabbar/ai/index.vue";
 
 const isFullScreen = ref(false)
 const systemStore = useSystemStore(pinia)
@@ -16,11 +17,12 @@ const systemStore = useSystemStore(pinia)
 //   : ref('#2f4056')
 const $route = router
 const drawer = ref(false)
-
+const aidrawer=ref(false)
 // 修改图标
 const changeIcon = () => {
   systemStore.fold = !systemStore.fold
 }
+const aiComp = ref(null)
 //修改全屏
 const changeFullScreen = () => {
   isFullScreen.value = !isFullScreen.value
@@ -70,6 +72,12 @@ const handleInformation = async () => {
 //展示抽屉
 const handleDrawer = () => {
   drawer.value = true
+
+}
+// 展示ai抽屉
+const handleAiDrawer = async () => {
+  aidrawer.value=true
+  await aiComp.value.load()
 }
 
 // 暗黑模式
@@ -83,8 +91,13 @@ const load = async () => {
   notics.value = res.data
 }
 load()
+// 关闭setting弹框
 const handleChangeDrawer=async (value)=>{
   drawer.value=value
+}
+// 关闭ai弹框
+const handleChangeAiDrawer=async (value)=>{
+  aidrawer.value=value
 }
 
 </script>
@@ -132,9 +145,38 @@ export default {
       <div
           class="layout-tabbar__settings"
       >
+        <el-tooltip
+            class="box-item"
+            effect="dark"
+            content="AI助手"
+            placement="top-start"
+        >
+        <el-button type="info" @click="handleAiDrawer" :icon="ChatDotRound" circle/>
+        </el-tooltip>
+        <el-tooltip
+            class="box-item"
+            effect="dark"
+            content="外观设置"
+            placement="top-start"
+        >
         <el-button type="warning" @click="handleDrawer" :icon="Setting" circle/>
+        </el-tooltip>
+        <el-tooltip
+            class="box-item"
+            effect="dark"
+            content="刷新页面"
+            placement="top-start"
+        >
         <el-button type="primary" @click="refsh" :icon="Loading" circle/>
+        </el-tooltip>
+        <el-tooltip
+            class="box-item"
+            effect="dark"
+            content="全屏/非全屏展示"
+            placement="top-start"
+        >
         <el-button type="success" @click="changeFullScreen" :icon="FullScreen" circle/>
+        </el-tooltip>
         <el-avatar :src="systemStore.userInfo.avatar" :size="32"
                    class="layout-tabbar__settings-avatar"
         ></el-avatar>
@@ -164,6 +206,13 @@ export default {
   :drawer="drawer"
   @changeDrawer="handleChangeDrawer"
   ></TabbarSettings>
+  <!--ai聊天组件-->
+  <AiChat
+      :aidrawer="aidrawer"
+      ref="aiComp"
+      @changeaidrawer="handleChangeAiDrawer"
+  ></AiChat>
+
 </template>
 
 <style scoped lang="scss">

@@ -1,6 +1,7 @@
 package com.example.authority.config;
 
 import com.example.authority.handler.WebSocketHandler;
+import com.example.authority.interceptor.WebSocketInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;

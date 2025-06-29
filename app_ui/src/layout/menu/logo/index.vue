@@ -2,12 +2,13 @@
 import {ref, watch} from 'vue'
 import useSystemStore from '@/stores/system'
 import router from '@/router'
-import settings from "../../../utils/settings";
 
 const $route = router
 const systemStore = useSystemStore()
 const fold = ref(systemStore.fold)
 
+
+const layoout_name=import.meta.env.VITE_LAYOUT_NAME
 // 监听 store.fold 变化，更新 fold 并切换 img key，强制触发动画
 watch(() => systemStore.fold, (newVal) => {
   fold.value = false
@@ -16,7 +17,6 @@ watch(() => systemStore.fold, (newVal) => {
     fold.value = newVal
   }, 0)
 })
-
 const goHome = () => {
   $route.push('/')
 }
@@ -25,11 +25,11 @@ const goHome = () => {
 <template>
   <div class="layout-menu__logo" :class="{ fold: fold }" @click="goHome">
     <!-- 用 key 强制重新渲染img，触发动画 -->
-    <img
+    <el-image
         :key="fold ? 'fold' : 'unfold'"
         class="layout-menu__logo-icon"
-        :src="settings.logo_src"/>
-    <span class="layout-menu__logo-systemname" v-if="!fold">{{ settings.layout_name }}</span>
+        src="./logo.png"/>
+    <span class="layout-menu__logo-systemname" v-if="!fold">{{ layoout_name}}</span>
   </div>
 </template>
 
@@ -61,7 +61,6 @@ const goHome = () => {
   &.fold {
     width: 64px;
     justify-content: center;
-
     .layout-menu__logo-systemname {
       display: none; /* 你想隐藏字体时用 */
     }

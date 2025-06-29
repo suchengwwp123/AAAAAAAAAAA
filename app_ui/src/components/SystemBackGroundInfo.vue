@@ -44,7 +44,7 @@
             class="relative flex flex-col items-center justify-center gap-4 px-4"
         >
           <div class="text-center text-3xl font-bold md:text-7xl dark:text-white">
-           代码生成系统
+           {{login_name}}
           </div>
           <div class="py-4 text-base font-extralight md:text-3xl dark:text-neutral-100">
            基于SpringBoot+Vue架构,一键生成前后端代码、数据库表、接口文档。
@@ -65,12 +65,14 @@
 import { cn } from "@/lib/utils";
 
 import { Motion } from "motion-v";
+import {ref} from "vue";
 const props = withDefaults(defineProps(), {
   radialGradient: true,
 });
 const handleDoc=()=>{
-window.open('https://www.yuque.com/kouding-nkkg8/hyo7yl?# 《代码生成器实际案例》 密码：sgpe')
+window.open(`${import.meta.env.VITE_USE_URL}`)
 }
+const login_name=import.meta.env.VITE_LOGIN_NAME
 </script>
 
 <style scoped>

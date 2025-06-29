@@ -12,6 +12,13 @@ spring:
       base: http://localhost:11434
       chat:
         model: deepseek-r1:8b
+    deepseek:
+      api-key: sk-22f8a3957aa14e12b8fe417a8643e281
+      base-url: https://api.deepseek.com/v1
+      model: deepseek-chat
+      chat:
+        options:
+          max-tokens: 3000
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource

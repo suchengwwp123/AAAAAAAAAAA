@@ -1,6 +1,6 @@
 <script setup>
 import request from '@/utils/request'
-import settings from '@/utils/settings'
+
 import Cache from '@/views/monitor/cache/index.vue'
 import * as echarts from 'echarts';
 import {onBeforeMount, onBeforeUnmount, onMounted, reactive, ref} from 'vue'
@@ -12,10 +12,10 @@ import {Refresh, Search} from "@element-plus/icons-vue";
 // 当前时间
 const currentTime = ref('')
 const systemStore = useSystemStore(pinia)
-const currentDay = ref(7)
+const currentDay = ref('7')
 //公告数组
 const notices = ref([])
-
+const app_name=import.meta.env.VITE_LOGIN_NAME
 
 onMounted(async () => {
   await monitorload()
@@ -175,7 +175,7 @@ const handleReset = async () => {
           class="home-card-welcome"
       >
         <el-row>
-          <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="14">
+          <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
             <div class="home-card-welcome__left">
               <el-avatar :src="systemStore.userInfo.avatar"></el-avatar>
               <div>
@@ -185,7 +185,7 @@ const handleReset = async () => {
                     }},
                   </el-text>
                   <el-text size="large" class="home-card-welcome__left-system">欢迎使用 {{
-                      settings.layout_name
+                    app_name
                     }}
                   </el-text>
                 </div>
@@ -195,7 +195,7 @@ const handleReset = async () => {
               </div>
             </div>
           </el-col>
-          <el-col :xs="0" :sm="0" :md="0" :lg="12" :xl="10"
+          <el-col :xs="0" :sm="0" :md="0" :lg="12" :xl="12"
 
           >
             <div
@@ -224,7 +224,7 @@ const handleReset = async () => {
       </el-card>
     </el-col>
     <!--    性能监控格栅-->
-    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="10">
+    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
       <el-card class="home-card-info">
         <template #header>
           <div class="card-header">
@@ -238,7 +238,7 @@ const handleReset = async () => {
       </el-card>
     </el-col>
     <!--    访问记录格栅-->
-    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="14">
+    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
       <el-card class="home-card-analysis">
         <template #header>
           <div class="card-header">
@@ -252,7 +252,7 @@ const handleReset = async () => {
       </el-card>
     </el-col>
     <!--    系统公告格栅-->
-    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="10"
+    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12"
     >
       <el-card>
         <template #header>
@@ -275,7 +275,7 @@ const handleReset = async () => {
       </el-card>
     </el-col>
     <!--    系统参数格栅-->
-    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="14">
+    <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
       <el-card>
         <template #header>
           <div class="card-header">

@@ -5,17 +5,17 @@ import pinia from '@/stores/store'
 import request from '@/utils/request'
 import {ElMessage, ElNotification} from 'element-plus'
 import router from '@/router'
-import settings from "@/utils/settings";
+
 import {rsaEncrypt} from '@/utils/rsa'
 import SystembackgroundCover from "../../../components/SystembackgroundCover.vue";
+import SystemBackGroundInfo from "@/components/SystemBackGroundInfo.vue";
 
 const $route = router
 const systemStore = useSystemStore(pinia)
 const userInfo = systemStore.userInfo
 const captchaImg = ref('')
+const copyright=import.meta.env.VITE_COPYRIGHT_NAME
 
-
-setTimeout(() => show.value = true, 500)
 const formSize = ref('default')
 const ruleFormRef = ref()
 const ruleForm = reactive({
@@ -175,7 +175,7 @@ export default {
     <el-col :xs="0" :sm="0" :md="12" :lg="16" :xl="16"
 
     >
-      <SystembackgroundCover></SystembackgroundCover>
+      <SystemBackGroundInfo></SystemBackGroundInfo>
     </el-col>
     <el-col :xs="24" :sm="18" :md="12" :lg="8" :xl="8"
     >
@@ -185,7 +185,7 @@ export default {
         <div
             class="register-form-container__header"
         >
-          <h1 class="register-form-container__header-title">注册</h1>
+          <h1 class="register-form-container__header-title text-3xl">注册</h1>
           <el-text>已有账户?</el-text>
 
           <el-text type="warning"
@@ -272,7 +272,7 @@ export default {
 
         </el-form>
         <footer class="register-form-container__footer">
-          <el-text>{{ settings.copyright }}</el-text>
+          <el-text>{{ copyright}}</el-text>
         </footer>
 
       </div>

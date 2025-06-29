@@ -6,12 +6,12 @@ import useSystemStore from '@/stores/system'
 import router from '@/router'
 
 
-import settings from "../../../utils/settings";
+
 import {rsaEncrypt} from '@/utils/rsa'
 import LoginCover from "../../../components/SystembackgroundCover.vue";
 import SystembackgroundCover from "../../../components/SystembackgroundCover.vue";
 import SystemBackGroundInfo from "@/components/SystemBackGroundInfo.vue";
-
+const copyright=import.meta.env.VITE_COPYRIGHT_NAME
 const $route = router
 const systemStore = useSystemStore()
 const formSize = ref('default')
@@ -156,7 +156,7 @@ onBeforeMount(()=>{
         <div
             class="login-form-container__header"
         >
-          <h1 class="login-form-container__header-title">登录</h1>
+          <h1 class="login-form-container__header-title text-3xl">登录</h1>
           <el-text>没有账户?</el-text>
 
           <el-text type="warning"
@@ -222,7 +222,7 @@ onBeforeMount(()=>{
           </div>
         </el-form>
         <footer class="login-form-container__footer">
-          <el-text>{{ settings.copyright }}</el-text>
+          <el-text>{{ copyright}}</el-text>
         </footer>
 
       </div>

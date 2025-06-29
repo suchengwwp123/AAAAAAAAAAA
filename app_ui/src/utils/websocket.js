@@ -1,7 +1,7 @@
 // utils/useWebSocket.js
 import useSystemStore from "@/stores/system";
 import pinia from "@/stores/store";
-import settings from "@/utils/settings";
+
 
 const systemStore = useSystemStore(pinia)
 

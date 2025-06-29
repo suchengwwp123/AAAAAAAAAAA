@@ -115,7 +115,7 @@
     <!-- 关闭 SQL 输出（MyBatis 等） -->
     <logger name="java.sql" level="OFF"/>
     <logger name="org.mybatis" level="OFF"/>
-
+    <logger name="org.springframework.ai.chat.client.advisor" level="DEBUG"></logger>
     <!-- Spring 框架日志级别 -->
     <logger name="org.springframework" level="INFO"/>
 

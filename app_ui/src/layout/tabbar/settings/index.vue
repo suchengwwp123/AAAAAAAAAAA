@@ -1,10 +1,10 @@
 <script setup>
 import useSystemStore from "@/stores/system";
 import pinia from "@/stores/store";
-import settings from "@/utils/settings";
+
 import {ElMessage} from "element-plus";
 import {ref} from "vue";
-import {Refresh} from "@element-plus/icons-vue";
+
 
 const systemStore = useSystemStore(pinia)
 /**
@@ -31,14 +31,14 @@ const handleBgc = () => {
   if (systemStore.backgroundColor) {
     systemStore.setBgc(systemStore.backgroundColor)
   } else {
-    systemStore.setBgc(localStorage.getItem('bgc') ? localStorage.getItem('bgc') : settings.menu_bgcolor)
+    systemStore.setBgc(localStorage.getItem('bgc') ? localStorage.getItem('bgc') : import.meta.env.VITE_BG_COLOR)
   }
 }
 const handleTextColor = () => {
   if (systemStore.textColor) {
     systemStore.setTextColor(systemStore.textColor)
   } else {
-    systemStore.setTextColor(localStorage.getItem('tc') ? localStorage.getItem('tc') : settings.menu_fontcolor)
+    systemStore.setTextColor(localStorage.getItem('tc') ? localStorage.getItem('tc') :  import.meta.env.VITE_TEXT_COLOR)
   }
 }
 
@@ -48,19 +48,28 @@ const handleActiveTextcolor = () => {
     systemStore.setAtiveTextcolor(systemStore.activeTextcolor)
   } else {
     systemStore.setAtiveTextcolor(
-        localStorage.getItem('at') ? localStorage.getItem('at') : settings.menu_selected_bgcolor
+        localStorage.getItem('at') ? localStorage.getItem('at') : import.meta.env.VITE_SELECTED_COLOR
     )
   }
 
 }
 const handleWaterMark = () => {
+
+  if (systemStore.watermark) {
+    systemStore.setWaterMark(systemStore.watermark)
+  } else {
+    systemStore.setWaterMark(
+        localStorage.getItem('watermark') ? localStorage.getItem('watermark') : import.meta.env.VITE_IS_WATERMARK
+    )
+  }
+
   systemStore.setWaterMark(systemStore.watermark)
 }
 const resetSetting = () => {
-  systemStore.setBgc(settings.menu_bgcolor)
-  systemStore.setTextColor(settings.menu_fontcolor)
-  systemStore.setAtiveTextcolor(settings.menu_selected_bgcolor)
-  systemStore.setWaterMark(settings.is_watermark)
+  systemStore.setBgc(import.meta.env.VITE_BG_COLOR)
+  systemStore.setTextColor(import.meta.env.VITE_TEXT_COLOR)
+  systemStore.setAtiveTextcolor(import.meta.env.VITE_SELECTED_COLOR)
+  systemStore.setWaterMark(import.meta.env.VITE_IS_WATERMARK)
   emit('changeDrawer', false)
   ElMessage({
     showClose: true,
@@ -79,7 +88,7 @@ const handleSumbmitForm = async () => {
   emit('changeDrawer', false)
   ElMessage({
     showClose: true,
-    message: '保存成功，如果永久保存，请去app_ui/src/utils/settings.js进行配置',
+    message: '保存成功，如果永久保存，请去.env多环境文件中进行详细配置',
     type: 'success'
   })
 }
@@ -131,6 +140,9 @@ export default {
                 inline-prompt
                 active-text="展示"
                 inactive-text="隐藏"
+                :active-value="'1'"
+                :inactive-value="'0'"
+                style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
             />
           </el-form-item>
 

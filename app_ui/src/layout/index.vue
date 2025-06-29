@@ -32,6 +32,7 @@ export default {
       <el-scrollbar>
         <Logo></Logo>
         <el-menu
+            unique-opened
             :background-color="systemStore.backgroundColor"
             :text-color="systemStore.textColor"
             :collapse="systemStore.fold"
@@ -53,7 +54,7 @@ export default {
     <div class="layout-main" :class="{ fold: systemStore.fold ? true : false }">
       <el-scrollbar>
         <a-watermark :content="systemStore.userInfo.username+'_'+systemStore.userInfo.nickname"
-        v-if="systemStore.watermark"
+        v-if="systemStore.watermark==='1'"
         >
           <Main></Main>
         </a-watermark>

@@ -47,9 +47,12 @@ const isCheckAllKeys = ref(false)
 const rules = reactive({
   username: [
     {required: true, message: '输入账户名', trigger: 'blur'},
-    {min: 5, max: 10, message: '长度在5到10位之间', trigger: 'blur'}
+    {min: 5, max: 10, message: '长度在5到10位之间', trigger: 'blur'},
+    { pattern: /^[a-zA-Z]+$/, message: '只能输入英文字符', trigger: 'blur' }
   ],
-  nickname: [{required: true, message: '必选项不能为空', trigger: 'blur'}],
+  nickname: [{required: true, message: '必选项不能为空', trigger: 'blur'},
+    {min: 2, max: 5, message: '长度在2到5位之间', trigger: 'blur'}
+  ],
   statu: [{required: true, message: '必选项不能为空', trigger: 'change'}],
   avatar: [{required: true, message: '必选项不能为空', trigger: 'change'}],
   phone: [

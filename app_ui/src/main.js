@@ -3,7 +3,9 @@ import '@/styles/global.css'
 import '@/styles/theme.scss'
 import '@/styles/tailwind.css'
 import Antd from 'ant-design-vue';
-
+import TDesign from 'tdesign-vue-next';
+import TDesignChat from '@tdesign-vue-next/chat'; // 引入chat组件
+import '@tdesign-vue-next/chat/es/style/index.css'; // 引入chat组件的少量全局样式变量
 // 导入elementui
 import 'ant-design-vue/dist/reset.css';
 import ElementPlus from 'element-plus'
@@ -31,5 +33,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(Directive)
 
 app.use(Antd)
-
+app.use(TDesign).use(TDesignChat);
 app.mount('#app')

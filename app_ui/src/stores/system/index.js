@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import settings from "@/utils/settings";
+
 
 // useStore 可以是 useUser、useCart 之类的任何东西
 // 第一个参数是应用程序中 store 的唯一 id
@@ -15,10 +15,10 @@ const useSystemStore = defineStore('System', {
             hasRouter: false,
             routers: [],
             permissionPerms: [],
-            backgroundColor: localStorage.getItem('bgc') ? localStorage.getItem('bgc') : settings.menu_bgcolor,
-            textColor: localStorage.getItem('tc') ? localStorage.getItem('tc') : settings.menu_fontcolor,
-            activeTextcolor: localStorage.getItem('at') ? localStorage.getItem('at') : settings.menu_selected_bgcolor,
-            watermark: localStorage.getItem('watermark')? localStorage.getItem('watermark')==='true' : settings.is_watermark,
+            backgroundColor: localStorage.getItem('bgc') ? localStorage.getItem('bgc') : import.meta.env.VITE_BG_COLOR,
+            textColor: localStorage.getItem('tc') ? localStorage.getItem('tc') : import.meta.env.VITE_TEXT_COLOR,
+            activeTextcolor: localStorage.getItem('at') ? localStorage.getItem('at') : import.meta.env.VITE_SELECTED_COLOR,
+            watermark: localStorage.getItem('watermark') ? localStorage.getItem('watermark') : import.meta.env.VITE_IS_WATERMARK,
         }
     },
     actions: {
@@ -42,7 +42,7 @@ const useSystemStore = defineStore('System', {
         setWaterMark(value) {
 
             localStorage.setItem('watermark', value)
-            this.watermark = localStorage.getItem('watermark') === 'true'
+            this.watermark = localStorage.getItem('watermark')
 
         },
         setUserInfo(userInfo) {

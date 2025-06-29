@@ -1,9 +1,12 @@
 <script setup>
 import {nextTick, onBeforeMount, reactive, ref} from 'vue'
 import {CopyDocument, FolderAdd, InfoFilled, Plus, Refresh, View} from '@element-plus/icons-vue'
-import {ElMessage, ElMessageBox} from 'element-plus'
+import {ElLoading, ElMessage, ElMessageBox} from 'element-plus'
 import request from '@/utils/request'
 import router from "@/router";
+import IconCommunity from "@/components/icons/IconCommunity.vue";
+import IconDocumentation from "@/components/icons/IconDocumentation.vue";
+import IconAI from "@/components/icons/IconAI.vue";
 
 const formRef = ref()
 const sqlFormRef = ref()
@@ -188,7 +191,51 @@ const submitForm = (formEl) => {
   })
 }
 
+const submitFormAi = (formEl) => {
+  if (!formEl) return
+  formEl.validate(async (valid) => {
+    if (valid) {
 
+
+      ElMessageBox.confirm(
+          '确认已经仔细数据库表的名称和注释?',
+          '重要提示',
+          {
+            confirmButtonText: '确认',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }
+      )
+          .then(async () => {
+            const loading = ElLoading.service({
+              lock: true,
+              text: '正在Ai构建中，请勿进行其他操作!',
+              background: 'rgba(0, 0, 0, 0.7)',
+            })
+          const res=   await request.post('/generator/ai', dynamicValidateForm)
+            Object.assign(dynamicValidateForm, res.data)
+            loading.close()
+            dynamicValidateForm.domains.forEach(domain => {
+
+                  if (domain.defaultValue === 'null'|| domain.defaultValue === 'NULL')
+                    domain.defaultValue = null
+                }
+            )
+          })
+          .catch(() => {
+            ElMessage({
+              showClose: true,
+              message: '取消构建！',
+              type: 'warning'
+            })
+          })
+
+    } else {
+      console.log('error submit!')
+      return false
+    }
+  })
+}
 // 提交sq表单
 const submitSqlForm = (formEl) => {
   if (!formEl) return
@@ -200,9 +247,9 @@ const submitSqlForm = (formEl) => {
       Object.assign(dynamicValidateForm, res.data)
       dynamicValidateForm.domains.forEach(domain => {
 
-      if (domain.defaultValue === 'null')
-        domain.defaultValue = null
-      }
+            if (domain.defaultValue === 'null'|| domain.defaultValue === 'NULL')
+              domain.defaultValue = null
+          }
       )
       dialog.value=false
     } else {
@@ -316,6 +363,11 @@ const beforeCloseSqlForm = async (done) => {
                    :icon="Plus"
         >新增字段
         </el-button>
+        <el-button @click="submitFormAi(formRef)"
+                   type="success"
+                   :icon="IconAI"
+        >AI构建
+        </el-button>
         <el-button @click="addSql" type="info"
                    :icon="CopyDocument"
         >导入sql
@@ -324,10 +376,7 @@ const beforeCloseSqlForm = async (done) => {
                    :icon="Refresh"
         >清空数据
         </el-button>
-        <el-button @click="handleView" type="success"
-                   :icon="View"
-        >查看教程
-        </el-button>
+
         <el-button type="danger"
                    :icon="FolderAdd"
                    @click="submitForm(formRef)">构建代码
@@ -548,11 +597,8 @@ const beforeCloseSqlForm = async (done) => {
 
   <!--  导入sql抽屉组件-->
   <el-drawer v-model="dialog" title="请将sql语句添加到下方输入框"
-
              :before-close="beforeCloseSqlForm"
              append-to-body size="40%">
-
-
     <el-form
         ref="sqlFormRef"
         :rules="rules"

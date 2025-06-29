@@ -1,6 +1,7 @@
 package com.example.authority.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -21,6 +22,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
+import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.fill.Column;
 import com.example.authority.common.Constant;
 import com.example.authority.common.Result;
@@ -104,13 +106,34 @@ public class GeneratorServiceImpl implements GeneratorService {
         this.checkTableNameInDatabase(generatorDto.getTableName());
 
         String sql = this.generatorSql(generatorDto);
-
+//     生成数据库表
         this.generatorTable(generatorDto.getTableName(), sql);
-        this.generatorBackendCode(generatorDto.getTableName(), generatorDto.getDomains());
+
+//        生成代码方法start
+//        克隆一个对象 对原始的对象值不污染
+        System.out.println("1"+JSONUtil.toJsonStr(generatorDto));
+        GeneratorDto generatorDtoCreate = ObjectUtil.cloneByStream(generatorDto);
+        //        表创建完毕以后，对所有字段进行转驼峰,保留原始的，回显的时候使用
+        generatorDtoCreate.setDomains(generatorDtoCreate.getDomains().stream().map(sqlDto ->
+                {
+                    sqlDto.setName(StrUtil.toCamelCase(sqlDto.getName()));
+                    if (StrUtil.isNotEmpty(sqlDto.getName())) {
+                        String capitalized = StrUtil.upperFirst(sqlDto.getName()); // 首字母大写
+                        sqlDto.setGMethod("get" + capitalized + "()"); // 设置 gMethod
+                        sqlDto.setGLamda("get" + capitalized); // 设置 gMethod
+                        sqlDto.setSMethod("set" + capitalized + "()"); // 设置 sMethod
+                    }
+                    return sqlDto; // 返回修改后的对象
+                }
+        ).collect(Collectors.toList()));
+        System.out.println("2"+JSONUtil.toJsonStr(generatorDto));
+        this.generatorBackendCode(generatorDtoCreate.getTableName(), generatorDtoCreate.getDomains());
+        this.generatorFrontCode(generatorDtoCreate);
+        //      生成代码end
+//        保存的为原始用户提交的记录，方便回显
         this.generatorPermissons(generatorDto);
+        System.out.println("3"+JSONUtil.toJsonStr(generatorDto));
         this.saveRecord(generatorDto);
-        this.formattedField(generatorDto);
-        this.generatorFrontCode(generatorDto);
         this.documentGeneration();
 
     }
@@ -149,15 +172,7 @@ public class GeneratorServiceImpl implements GeneratorService {
      */
     private void saveRecord(GeneratorDto generatorDto) {
         String sql = generatorSql(generatorDto);
-        generatorDto.getDomains().stream()
-                .peek(sqlDto -> {
-                    String name = sqlDto.getName();
-                    if ("createTime".equals(name) || "updateTime".equals(name)) {
-//                        驼峰转成_
-                        sqlDto.setName(StrUtil.toUnderlineCase(name));
-                    }
-                })
-                .collect(Collectors.toList());
+
         recordService.save(new Record().setSqlStr(sql).setGenerator(JSONUtil.toJsonStr(generatorDto)).setUid(StpUtil.getLoginIdAsLong()).setDescription(generatorDto.getDescription()).setTableName(generatorDto.getTableName()));
     }
 
@@ -229,9 +244,7 @@ public class GeneratorServiceImpl implements GeneratorService {
     private void generatorFrontCode(GeneratorDto generatorDto) throws IOException {
 
 
-//        对所有的字段进行驼峰转换
-        generatorDto.setDomains(generatorDto.getDomains().stream().map(sqlDto -> sqlDto.setName(StrUtil.toCamelCase(sqlDto.getName()))).collect(Collectors.toList()));
-        //        设置velocity的资源加载器
+       //        设置velocity的资源加载器
         Properties properties = new Properties();
         properties.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
         //        初始化velocity引擎
@@ -311,6 +324,8 @@ public class GeneratorServiceImpl implements GeneratorService {
                             .enableFileOverride()
                             .entityBuilder()
                             .enableLombok()
+
+
                             .addTableFills(new Column("create_time", FieldFill.INSERT))
                             .addTableFills(new Column("update_time", FieldFill.UPDATE))
                             .enableChainModel()
@@ -343,17 +358,10 @@ public class GeneratorServiceImpl implements GeneratorService {
                 })
                 // 使用Velocity引擎模板
                 .execute();
+        log.info("后端SpringBoot代码生成成功");
     }
 
-    /**
-     * 转驼峰方法
-     *
-     * @param name
-     * @return
-     */
-    private static @Nullable String getCamelCase(String name) {
-        return StrUtil.toCamelCase(name);
-    }
+
 
     /**
      * 基于sql创建table
@@ -378,6 +386,7 @@ public class GeneratorServiceImpl implements GeneratorService {
             }
             //创建数据库表
             Db.use(ds).execute(sql);
+            log.info("数据库表生成成功");
         } catch (SQLException e) {
             throw new RuntimeException("构建数据库异常,详情为:" + e.getMessage());
         }
@@ -394,7 +403,6 @@ public class GeneratorServiceImpl implements GeneratorService {
                 generatorDto.setWidth("60%");
             }
         }
-        generatorDto.setDomains(generatorDto.getDomains().stream().map(sqlDto -> sqlDto.setName(StrUtil.toCamelCase(sqlDto.getName()))).collect(Collectors.toList()));
 
     }
 
@@ -522,27 +530,8 @@ public class GeneratorServiceImpl implements GeneratorService {
         sql += "PRIMARY KEY (`id`) USING BTREE \n";
         sql += ") ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='" + generatorDto.getDescription() + "';\n\n\n";
 
-        // 使用 Hutool 遍历 sqlDtoList 并设置 gMethod 和 sMethod
-        // todo  使用流处理设置 gMethod 和 sMethod
-        generatorDto.setDomains(generatorDto.getDomains().stream()
-                .map(sqlDto -> {
-                    String name = sqlDto.getName();
-                    if (StrUtil.isNotEmpty(name)) {
-                        String capitalized = StrUtil.upperFirst(name); // 首字母大写
-                        sqlDto.setGMethod("get" + capitalized + "()"); // 设置 gMethod
-                        sqlDto.setGLamda("get" + capitalized); // 设置 gMethod
-                        sqlDto.setSMethod("set" + capitalized + "()"); // 设置 sMethod
-                        if ("create_time".equals(name) || "update_time".equals(name)) {
-                            sqlDto.setName(getCamelCase(name));
-                            sqlDto.setSearchName(getCamelCase(name));
-                            sqlDto.setGLamda("get" + StrUtil.upperFirst(getCamelCase(name)));
-                            sqlDto.setGMethod("get" + StrUtil.upperFirst(getCamelCase(name)) + "()"); // 设置 gMethod
-                            sqlDto.setSMethod("set" + StrUtil.upperFirst(getCamelCase(name)) + "()"); // 设置 sMethod
-                        }
-                    }
-                    return sqlDto; // 返回修改后的对象
-                })
-                .collect(Collectors.toList()));   // 收集结果为 List
+
+
         return sql;
     }
 
@@ -667,6 +656,7 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         try {
             Statement stmt = CCJSqlParserUtil.parse(sql);
+
             if (!(stmt instanceof CreateTable)) {
                 throw new RuntimeException("请确保输入的Sql语句为建表语句");
             } else {
@@ -709,11 +699,17 @@ public class GeneratorServiceImpl implements GeneratorService {
                 boolean allMatch = columns.stream().allMatch(column -> {
                     ColDataType colDataType = column.getColDataType();
                     String columnType = colDataType.getDataType().toLowerCase(); // 统一转为小写
+                    columnType = columnType.replaceAll("\\s+", "");
                     List<String> args = colDataType.getArgumentsStringList();
 
                     String normalizedType;
                     if (args != null && !args.isEmpty()) {
-                        normalizedType = columnType + "(" + String.join("", args) + ")"; // 去除空格并拼接
+                        // 先 trim 掉每个参数里的空格，再拼接
+                        List<String> trimmedArgs = args.stream()
+                                .map(String::trim)
+                                .collect(Collectors.toList());
+                        normalizedType = columnType + "(" + String.join("", trimmedArgs) + ")";
+                        normalizedType = normalizedType.replaceAll("\\s+", "");
                     } else {
                         normalizedType = columnType;
                     }
@@ -726,11 +722,13 @@ public class GeneratorServiceImpl implements GeneratorService {
                     }
                 });
                 //todo 后续开发改进  有计划做成支持所有类型和长度的
+
                 if (!allMatch) {
-                    throw new RuntimeException("存在不支持的字段类型和长度，系统暂时支持的为:" + Arrays.stream(ColumnTypeEnum.values())
-                            .map(type -> type.getValue())
-                            .collect(Collectors.joining("-")));
-                }
+
+                        throw new RuntimeException("存在不支持的字段类型和长度，系统暂时支持的为:" + Arrays.stream(ColumnTypeEnum.values())
+                                .map(type -> type.getValue())
+                                .collect(Collectors.joining("-")));
+                    }
 
                 List<SqlDto> sqlDtos = columns.stream().map(column -> {
                     ColDataType colDataType = column.getColDataType();

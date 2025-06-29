@@ -1,4 +1,4 @@
-package com.example.authority.config;
+package com.example.authority.interceptor;
 
 
 import java.util.Map;

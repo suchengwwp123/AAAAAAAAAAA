@@ -1,5 +1,5 @@
 import axios from 'axios'
-import settings from '@/utils/settings'
+
 import useSystemStore from '@/stores/system'
 import pinia from '@/stores/store'
 import NProgress from 'nprogress'
@@ -9,8 +9,8 @@ import 'nprogress/nprogress.css'
 const $route = router
 
 const systemStore = useSystemStore(pinia)
-// const $route = router
-// 进度条配置项这样写
+
+//进度条配置项这样写
 NProgress.configure({
   easing: 'ease', // 动画方式，和css动画属性一样（默认：ease）
   speed: 500, // 递增进度条的速度，单位ms（默认： 200）
@@ -19,9 +19,10 @@ NProgress.configure({
   trickleSpeed: 200, // 自动递增间隔
   minimum: 0.3 // 初始化时的最小百分比，0-1（默认：0.08）
 })
+
 const request = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  timeout: 5000
+  timeout: 5000000
 })
 //请求拦截器
 request.interceptors.request.use((config) => {

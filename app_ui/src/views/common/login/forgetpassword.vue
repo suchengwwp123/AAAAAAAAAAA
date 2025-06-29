@@ -3,14 +3,16 @@ import { reactive, ref } from 'vue'
 import request from '@/utils/request'
 import { ElMessage } from 'element-plus'
 import router from '../../../router'
-import settings from "@/utils/settings";
+
 import { rsaEncrypt } from '@/utils/rsa'
 import SystembackgroundCover from "../../../components/SystembackgroundCover.vue";
+import SystemBackGroundInfo from "@/components/SystemBackGroundInfo.vue";
 const ruleFormRef = ref()
-const show=ref(false)
+const copyright=import.meta.env.VITE_COPYRIGHT_NAME
+
 const $route=router
 const formSize = ref('default')
-setTimeout(()=>show.value = true,500)
+
 // 校验原密码
 const checkPass = (rule, value, callback) => {
   if (!value) {
@@ -153,7 +155,7 @@ export default {
     <el-col :xs="0" :sm="0" :md="12" :lg="16" :xl="16"
 
     >
-      <SystembackgroundCover />
+      <SystemBackGroundInfo></SystemBackGroundInfo>
     </el-col>
     <el-col :xs="24" :sm="18" :md="12" :lg="8" :xl="8"
     >
@@ -163,7 +165,7 @@ export default {
         <div
             class="forget-form-container__header"
         >
-          <h1 class="forget-form-container__header-title">找回密码</h1>
+          <h1 class="forget-form-container__header-title text-3xl">找回密码</h1>
           <el-text>已知密码?</el-text>
 
           <el-text type="warning"
@@ -214,7 +216,7 @@ export default {
           </el-button>
         </el-form>
         <footer class="forget-form-container__footer">
-          <el-text>{{ settings.copyright }}</el-text>
+          <el-text>{{ copyright }}</el-text>
         </footer>
 
       </div>
