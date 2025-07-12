@@ -7,7 +7,7 @@ import downloadExcel from '@/utils/downloads'
 import router from "@/router";
 // 名称
 const name = ref('')
-const $route=router
+const $router=router
 // 当前页数
 const pageNum = ref(1)
 // 每页展示量
@@ -38,7 +38,7 @@ const handleAdd = async () => {
 }
 // 修改
 const handleUpdate = async (id) => {
-  $route.push(`/tools/generator?id=${id}`)
+  $router.push(`/tools/generator?id=${id}`)
 }
 // 单个删除
 const handleDel = async (id) => {
@@ -182,7 +182,9 @@ const handleSelectionChange = (val) => {
 
         <el-table-column prop="createTime" label="创建时间" align="center" show-overflow-tooltip />
 
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" align="center"
+        width="240"
+        >
           <template #default="scope">
             <div class="page-table-editout--layout">
               <div

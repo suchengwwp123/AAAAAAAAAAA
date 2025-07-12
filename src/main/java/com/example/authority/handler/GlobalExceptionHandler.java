@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import cn.hutool.core.io.IORuntimeException;
 
 /**
- * @program: authority-2026.0.23
+ * @program: authority-2026.0.33
  * @ClassName:GlobalExceptionHandler
  * @description: 全局异常拦截
  * @author:dyy

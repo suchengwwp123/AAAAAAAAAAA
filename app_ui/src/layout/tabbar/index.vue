@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, onUnmounted, ref} from 'vue'
+import {onMounted, onUnmounted, ref, watch} from 'vue'
 import {ChatDotRound, DataLine, Expand, Fold, FullScreen, InfoFilled, Loading, Setting} from '@element-plus/icons-vue'
 import useSystemStore from '@/stores/system'
 import router from '@/router'
@@ -9,15 +9,17 @@ import {ElMessage, ElMessageBox} from "element-plus";
 import {useDark, useToggle} from "@vueuse/core";
 import TabbarSettings from './settings/index.vue'
 import AiChat from "@/layout/tabbar/ai/index.vue";
+import {useRoute} from "vue-router";
 
 const isFullScreen = ref(false)
 const systemStore = useSystemStore(pinia)
 // const backgroudColor = localStorage.getItem('bgc')
 //   ? ref(localStorage.getItem('bgc'))
 //   : ref('#2f4056')
-const $route = router
+const $router = router
+const $route = useRoute()
 const drawer = ref(false)
-const aidrawer=ref(false)
+const aidrawer = ref(false)
 // 修改图标
 const changeIcon = () => {
   systemStore.fold = !systemStore.fold
@@ -51,7 +53,7 @@ const handleLogOut = async () => {
       .then(async () => {
         await request.post('/auth/logout')
         systemStore.reset()
-        await $route.replace('/login')
+        await $router.replace('/login')
 
         ElMessage({
           showClose: true,
@@ -67,7 +69,7 @@ const handleLogOut = async () => {
 }
 // 修改个人信息
 const handleInformation = async () => {
-  await $route.replace('/information')
+  await $router.replace('/information')
 }
 //展示抽屉
 const handleDrawer = () => {
@@ -76,7 +78,7 @@ const handleDrawer = () => {
 }
 // 展示ai抽屉
 const handleAiDrawer = async () => {
-  aidrawer.value=true
+  aidrawer.value = true
   await aiComp.value.load()
 }
 
@@ -92,13 +94,25 @@ const load = async () => {
 }
 load()
 // 关闭setting弹框
-const handleChangeDrawer=async (value)=>{
-  drawer.value=value
+const handleChangeDrawer = async (value) => {
+  drawer.value = value
 }
 // 关闭ai弹框
-const handleChangeAiDrawer=async (value)=>{
-  aidrawer.value=value
+const handleChangeAiDrawer = async (value) => {
+  aidrawer.value = value
 }
+const show = ref(true)
+/**
+ * 整体性路由使用$router
+ * 单个路由对象使用$route
+ */
+watch(
+    () => $route.path,
+    (newPath, oldPath) => {
+      show.value = false
+      setTimeout(() => show.value = true, 100)
+    }
+)
 
 </script>
 <script>
@@ -107,35 +121,36 @@ export default {
 }
 </script>
 <template>
-<!--  tabbbar组件-->
+  <!--  tabbbar组件-->
   <el-row
       class="layout-tabbar"
 
   >
     <el-col :xs="0" :sm="10" :md="10" :lg="10" :xl="10">
-      <div
-          class="layout-tabbar__fold"
+      <div class="layout-breadcrumb el-zoom-in-center"
+           v-if="show"
       >
-        <el-icon size="20"
-                 class="layout-tabbar__fold-icon"
-        >
-          <component :is="systemStore.fold ? Expand : Fold" @click="changeIcon"></component>
+        <!-- 折叠图标 -->
+        <el-icon size="20" class="fold-icon" @click="changeIcon">
+          <component :is="systemStore.fold ? Expand : Fold"/>
         </el-icon>
-        <el-breadcrumb separator="/">
+
+        <!-- 面包屑导航 -->
+        <el-breadcrumb separator="/" class="breadcrumb">
           <el-breadcrumb-item
-              v-for="(item, index) in $route.currentRoute.value.matched"
+              v-for="(item, index) in $route.matched"
               v-show="item.name"
-              :key="index.toString()"
+              :key="index"
               :to="item.path"
           >
-            <el-icon>
-              <component :is="item.meta.icon"></component>
+            <el-icon class="breadcrumb-icon">
+              <component :is="item.meta.icon"/>
             </el-icon>
-            {{ item.meta.title }}
+            <span class="breadcrumb-title">{{ item.meta.title }}</span>
           </el-breadcrumb-item>
         </el-breadcrumb>
-
       </div>
+
 
     </el-col>
 
@@ -151,7 +166,7 @@ export default {
             content="AI助手"
             placement="top-start"
         >
-        <el-button type="info" @click="handleAiDrawer" :icon="ChatDotRound" circle/>
+          <el-button type="info" @click="handleAiDrawer" :icon="ChatDotRound" circle/>
         </el-tooltip>
         <el-tooltip
             class="box-item"
@@ -159,7 +174,7 @@ export default {
             content="外观设置"
             placement="top-start"
         >
-        <el-button type="warning" @click="handleDrawer" :icon="Setting" circle/>
+          <el-button type="warning" @click="handleDrawer" :icon="Setting" circle/>
         </el-tooltip>
         <el-tooltip
             class="box-item"
@@ -167,7 +182,7 @@ export default {
             content="刷新页面"
             placement="top-start"
         >
-        <el-button type="primary" @click="refsh" :icon="Loading" circle/>
+          <el-button type="primary" @click="refsh" :icon="Loading" circle/>
         </el-tooltip>
         <el-tooltip
             class="box-item"
@@ -175,11 +190,11 @@ export default {
             content="全屏/非全屏展示"
             placement="top-start"
         >
-        <el-button type="success" @click="changeFullScreen" :icon="FullScreen" circle/>
+          <el-button type="success" @click="changeFullScreen" :icon="FullScreen" circle/>
         </el-tooltip>
-        <el-avatar :src="systemStore.userInfo.avatar" :size="32"
-                   class="layout-tabbar__settings-avatar"
-        ></el-avatar>
+        <el-image :src="systemStore.userInfo.avatar" :size="32"
+                  class="layout-tabbar__settings-avatar"
+        ></el-image>
 
         <el-dropdown>
         <span class="el-dropdown-link">
@@ -201,10 +216,10 @@ export default {
       </div>
     </el-col>
   </el-row>
-<!--settings组件-->
+  <!--settings组件-->
   <TabbarSettings
-  :drawer="drawer"
-  @changeDrawer="handleChangeDrawer"
+      :drawer="drawer"
+      @changeDrawer="handleChangeDrawer"
   ></TabbarSettings>
   <!--ai聊天组件-->
   <AiChat
@@ -219,28 +234,66 @@ export default {
 .layout-tabbar {
   height: 100%;
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1); /* 阴影效果 */
-  .layout-tabbar__fold {
-    height: 100%;
+  .layout-breadcrumb {
     display: flex;
     align-items: center;
-    .layout-tabbar__fold-icon {
-      margin-left: 10px;
-    }
+    height: 48px;
+    padding: 0 10px;
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   }
+
+  .fold-icon {
+    margin-right: 10px;
+    cursor: pointer;
+    color: #606266;
+    transition: color 0.3s;
+  }
+
+  .fold-icon:hover {
+    color: #409EFF;
+  }
+
+  .breadcrumb {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+  }
+
+  .breadcrumb-icon {
+    margin-right: 4px;
+    color: #999;
+  }
+
+  .breadcrumb-title {
+    color: #303133;
+    font-weight: 500;
+  }
+
   .layout-tabbar__settings {
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: end;
     gap: 10px;
-    .el-button{
+
+    .el-button {
       margin: 0;
     }
+
     .el-dropdown-link {
       cursor: pointer;
 
     }
-    .layout-tabbar__settings-end{
+
+    .layout-tabbar__settings-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    .layout-tabbar__settings-end {
       width: 40px;
     }
   }

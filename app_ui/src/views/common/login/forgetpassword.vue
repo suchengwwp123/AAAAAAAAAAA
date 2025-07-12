@@ -10,7 +10,7 @@ import SystemBackGroundInfo from "@/components/SystemBackGroundInfo.vue";
 const ruleFormRef = ref()
 const copyright=import.meta.env.VITE_COPYRIGHT_NAME
 
-const $route=router
+const $router=router
 const formSize = ref('default')
 
 // 校验原密码
@@ -26,11 +26,14 @@ const checkPass = (rule, value, callback) => {
 }
 // 校验新密码
 const validatePass = (rule, value, callback) => {
-  if (value === '') {
+  if (value === ''||!value) {
     callback(new Error('请输入新密码'))
-  } else if (value.toString().length < 5 || value.toString().length > 10) {
-    return callback(new Error('密码长度在5到10位之间'))
+  } else if (value.length < 5 || value.length > 10) {
+    callback(new Error('密码长度在5到10位之间'))
+  } else if (!/^[A-Za-z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/.test(value)) {
+    callback(new Error('密码只能包含字母、数字和常用符号'))
   } else {
+    // 若已输入确认密码，触发确认密码字段的校验刷新
     if (ruleForm.checkPass !== '') {
       if (!ruleFormRef.value) return
       ruleFormRef.value.validateField('checkPass', () => null)
@@ -38,14 +41,17 @@ const validatePass = (rule, value, callback) => {
     callback()
   }
 }
+
 // 确认密码
 const validatePass2 = (rule, value, callback) => {
-  if (value === '') {
+  if (value === ''||!value) {
     callback(new Error('请确认密码'))
-  } else if (value.toString().length < 5 || value.toString().length > 10) {
-    return callback(new Error('密码长度在5到10位之间'))
+  } else if (value.length < 5 || value.length > 10) {
+    callback(new Error('密码长度在5到10位之间'))
+  } else if (!/^[A-Za-z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+$/.test(value)) {
+    callback(new Error('密码只能包含字母、数字和常用符号'))
   } else if (!ruleForm.password) {
-    return ruleFormRef.value.validateField('password', () => null)
+    ruleFormRef.value.validateField('password', () => null)
   } else if (value !== ruleForm.password) {
     callback(new Error('两次密码输入不一致'))
   } else {
@@ -53,7 +59,9 @@ const validatePass2 = (rule, value, callback) => {
   }
 }
 
+
 const ruleForm = reactive({
+  username: '',
   password: '',
   checkPass: '',
   oldpass: ''
@@ -70,11 +78,19 @@ const rules = reactive({
   ],
   username: [
     { required: true, message: '输入用户账户名', trigger: 'blur' },
-    { min: 5, max: 10, message: '长度在5到10位之间', trigger: 'blur' }
+    {
+      pattern: /^(?!\d+$)[A-Za-z\d]{5,10}$/,
+      message: '账户名必须是5到10位字母或字母数字组合',
+      trigger: 'blur'
+    }
   ],
   code: [
     { required: true, message: '输入邮箱验证码', trigger: 'blur' },
-    {min: 5, max: 5, message: '验证码为长度为5', trigger: 'blur'}
+    {
+      pattern: /^\d{5}$/,
+      message: '验证码必须是5位数字',
+      trigger: 'blur'
+    }
   ]
 })
 
@@ -102,7 +118,7 @@ const submitForm = (formEl) => {
         message: '修改密码成功！',
         type: 'success'
       })
-     $route.go(-1)
+     $router.go(-1)
     } else {
       return false
     }
@@ -170,7 +186,7 @@ export default {
 
           <el-text type="warning"
                    class="forget-form-container__header-link"
-                   @click="$route.push(`/login`)">
+                   @click="$router.push(`/login`)">
             立即登录
           </el-text>
         </div>
@@ -180,37 +196,39 @@ export default {
             ref="ruleFormRef"
             :model="ruleForm"
             :rules="rules"
-            label-width="80px"
+
             :size="formSize"
             status-icon
         >
-          <el-form-item label="账户名&nbsp;&nbsp;&nbsp;&nbsp;" prop="username">
+          <el-form-item  prop="username">
             <el-input v-model="ruleForm.username" autocomplete="off"
             placeholder="请输入账户名"
             />
           </el-form-item>
-          <el-form-item label="新的密码" prop="password">
+          <el-form-item prop="password">
             <el-input v-model="ruleForm.password"
                       placeholder="请输入新的密码"
                       type="password" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="确认密码" prop="checkPass">
+          <el-form-item  prop="checkPass">
             <el-input v-model="ruleForm.checkPass"
                       placeholder="请确认密码"
                       type="password" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="验证码&nbsp;&nbsp;&nbsp;&nbsp;" prop="code">
-            <el-row :gutter="10">
-              <el-col :span="12">
-                <el-input v-model="ruleForm.code"
-                          placeholder="请输入验证码"
-                          autocomplete="off" />
-              </el-col>
-              <el-col :span="12">
+          <el-form-item  prop="code">
+
+              <div class="forget-form-container__content-captcha">
+                <el-input
+                    v-model="ruleForm.code"
+                    placeholder="请输入验证码"
+                    prefix-icon="Crop"
+
+                />
                 <el-button type="warning" @click="handleGetEmailCode">获取验证码</el-button>
-              </el-col>
-            </el-row>
-          </el-form-item>
+              </div>
+            </el-form-item>
+
+
           <el-button type="primary" class="forget-form-container__content-submitbutton--full" @click="submitForm(ruleFormRef)">
             找回密码
           </el-button>
@@ -232,11 +250,11 @@ export default {
 
 
   .forget-form-container {
-    padding: 0px 80px;
+    padding: 0px 30px;
     display: flex;
     flex-direction: column;
     justify-content: end;
-    height: 100vh;
+    height: 100dvh;
 
     .forget-form-container__header {
       height: 20vh;

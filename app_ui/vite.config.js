@@ -11,7 +11,7 @@ export default defineConfig({
     cors: true, // 如果需要支持跨域请求，可以设置为true
     proxy: {
       '/druid': {
-        target: 'http://localhost:9090/api/druid',
+        target: `http://127.0.0.1:9090/api/druid`,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/druid/, '')
       }

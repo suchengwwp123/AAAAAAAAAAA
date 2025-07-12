@@ -18,18 +18,23 @@ import downloadExcel from '@/utils/downloads'
 import {MdEditor} from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import router from "@/router";
+import { useRoute} from "vue-router";
+import pinia from "@/stores/store";
+import useSystemStore from "@/stores/system";
 
-const $route = router
+const $router = router
+const $route = useRoute()
 onBeforeMount(async () => {
-  if ($route.currentRoute.value.query.pid) {
-    pid.value = $route.currentRoute.value.query.pid
+  if ($route.query.pid) {
+    pid.value = $route.query.pid
     await load()
   } else {
-    $route.go(-1)
+    $router.go(-1)
   }
 
 })
-
+// 数据仓库
+const systemStore=useSystemStore(pinia)
 // 弹框头部名称
 const headerTitle = ref()
 // 当前页数
@@ -109,13 +114,13 @@ const rules = reactive({
 
 //新增方法
 const handleAdd = async () => {
-  headerTitle.value = reactive('新增字典')
+  headerTitle.value ='新增字典'
   dialogVisible.value = true
 }
 // 修改方法
 const handleUpdate = async (id) => {
   dialogVisible.value = true
-  headerTitle.value = reactive('编辑字典')
+  headerTitle.value = '编辑字典'
   const res = await request.get(`/dict/${id}`)
   Object.assign(form, res.data)
 
@@ -330,14 +335,14 @@ const onUploadImg = async (files, callback) => {
       :title="headerTitle"
       append-to-body
       :before-close="handleClose"
-      size="40%"
+      :size="systemStore.windowWidth<=768?'100%':'40%'"
   >
 
     <el-form
         ref="ruleFormRef"
         :model="form"
         :rules="rules"
-        label-width="120px"
+        label-width="80px"
         class="ruleForm"
         :size="formSize"
         status-icon
@@ -384,7 +389,7 @@ const onUploadImg = async (files, callback) => {
   >
 
     <el-page-header
-        @back="$route.go(-1)"
+        @back="$router.go(-1)"
     >
       <template
           #content

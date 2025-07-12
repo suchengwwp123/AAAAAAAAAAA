@@ -11,7 +11,7 @@
     </parent>
     <groupId>com.example</groupId>
     <artifactId>authority-master-system</artifactId>
-    <version>2026.0.1-SNAPSHOT</version>
+    <version>2026.0.3-SNAPSHOT</version>
     <name>authority-master-system</name>
     <description>authority-master-system design by coding</description>
     <properties>
@@ -44,6 +44,23 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!--        图片压缩-->
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.14</version>
+        </dependency>
+        <!--      数据清洗xss处理  -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.21.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.external</groupId>
+            <artifactId>org-apache-commons-io</artifactId>
+            <version>RELEASE113</version>
         </dependency>
         <!--     ollama   -->
         <dependency>
@@ -186,7 +203,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
-
+        <!--  解析浏览器 操作系统  -->
+        <dependency>
+            <groupId>eu.bitwalker</groupId>
+            <artifactId>UserAgentUtils</artifactId>
+            <version>1.21</version>
+        </dependency>
 
     </dependencies>
 

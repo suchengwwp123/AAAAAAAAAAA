@@ -18,8 +18,10 @@ import downloadExcel from '@/utils/downloads'
 import {MdEditor} from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import router from "@/router";
+import useSystemStore from "@/stores/system";
+import pinia from "@/stores/store";
 
-const $route = router
+const $router = router
 // 弹框头部名称
 const headerTitle = ref()
 // 当前页数
@@ -36,6 +38,8 @@ const multipleSelection = ref([])
 const disabled = ref(true)
 // 是否展示弹框
 const dialogVisible = ref(false)
+// 数据仓库
+const systemStore=useSystemStore(pinia)
 // 定义关联列表
 //定义查询值
 //   nameList
@@ -85,13 +89,13 @@ const rules = reactive({
 
 //新增方法
 const handleAdd = async () => {
-  headerTitle.value = reactive('新增字典')
+  headerTitle.value = '新增字典'
   dialogVisible.value = true
 }
 // 修改方法
 const handleUpdate = async (id) => {
   dialogVisible.value = true
-  headerTitle.value = reactive('编辑字典')
+  headerTitle.value = '编辑字典'
   const res = await request.get(`/dict/${id}`)
   Object.assign(form, res.data)
 
@@ -303,7 +307,7 @@ const onUploadImg = async (files, callback) => {
       :title="headerTitle"
       append-to-body
       :before-close="handleClose"
-      size="30%"
+      :size="systemStore.windowWidth<=768?'100%':'40%'"
   >
 
     <el-form
@@ -458,7 +462,7 @@ const onUploadImg = async (files, callback) => {
           >
             <el-link
 
-                @click="$route.push(`/system/dict/detail?pid=${scope.row.id}`)"
+                @click="$router.push(`/system/dict/detail?pid=${scope.row.id}`)"
                 type="primary"
             >{{ scope.row.identification }}
             </el-link>

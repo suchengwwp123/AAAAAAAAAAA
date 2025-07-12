@@ -7,17 +7,19 @@ import router from "@/router";
 import IconCommunity from "@/components/icons/IconCommunity.vue";
 import IconDocumentation from "@/components/icons/IconDocumentation.vue";
 import IconAI from "@/components/icons/IconAI.vue";
+import {useRoute} from "vue-router";
 
 const formRef = ref()
 const sqlFormRef = ref()
-const $route = router
+const $route = useRoute()
+const $router = router
 // 定义联级选择器的规则策略
 const props = {
   expandTrigger: 'hover',
 }
 onBeforeMount((async () => {
-  if ($route.currentRoute.value.query.id) {
-    await load($route.currentRoute.value.query.id)
+  if ($route.query.id) {
+    await load($route.query.id)
   }
   await handleGetTables()
 }))
@@ -52,11 +54,7 @@ const handleGetTables = async () => {
 
 
 }
-// 查看教程
-const handleView = async () => {
-  window.open('https://www.yuque.com/kouding-nkkg8/hyo7yl?# 《代码生成器实际案例》 密码：sgpe')
 
-}
 
 const dynamicValidateForm = reactive({
   domains: [
@@ -131,7 +129,6 @@ const addDomain = () => {
     key8: Date.now() + 9,
     name: null,
     typeAndsize: 'varchar(255)',
-
     description: null,
     defaultValue: null,
     formComponent: 'input',
@@ -174,7 +171,7 @@ const submitForm = (formEl) => {
               message: '构建成功，请立即重启项目！',
               type: 'success'
             })
-            $route.push(`/tools/record`)
+
           })
           .catch(() => {
             ElMessage({
@@ -212,12 +209,12 @@ const submitFormAi = (formEl) => {
               text: '正在Ai构建中，请勿进行其他操作!',
               background: 'rgba(0, 0, 0, 0.7)',
             })
-          const res=   await request.post('/generator/ai', dynamicValidateForm)
+            const res = await request.post('/generator/ai', dynamicValidateForm)
             Object.assign(dynamicValidateForm, res.data)
             loading.close()
             dynamicValidateForm.domains.forEach(domain => {
 
-                  if (domain.defaultValue === 'null'|| domain.defaultValue === 'NULL')
+                  if (domain.defaultValue === 'null' || domain.defaultValue === 'NULL')
                     domain.defaultValue = null
                 }
             )
@@ -247,11 +244,11 @@ const submitSqlForm = (formEl) => {
       Object.assign(dynamicValidateForm, res.data)
       dynamicValidateForm.domains.forEach(domain => {
 
-            if (domain.defaultValue === 'null'|| domain.defaultValue === 'NULL')
+            if (domain.defaultValue === 'null' || domain.defaultValue === 'NULL')
               domain.defaultValue = null
           }
       )
-      dialog.value=false
+      dialog.value = false
     } else {
       console.log('error submit!')
       return false
@@ -286,7 +283,7 @@ const resetForm = (formEl) => {
     sql: ''
   })
 
-  // $route.replace(`/tools/generator?id=`)
+
   location.reload()
 }
 // 重置sql表单
@@ -422,7 +419,7 @@ const beforeCloseSqlForm = async (done) => {
       <!--第二种条件进行判断是id的时候-->
 
       <!--      1数据字段名-->
-      <el-col :span="3">
+      <el-col class="form-content-col" :span="3">
         <el-form-item
             :key="domain.key"
 
@@ -437,7 +434,7 @@ const beforeCloseSqlForm = async (done) => {
         </el-form-item>
       </el-col>
       <!--      2数据类型和长度-->
-      <el-col :span="3">
+      <el-col class="form-content-col" :span="3">
         <el-form-item
             :key="domain.key1"
 
@@ -449,7 +446,7 @@ const beforeCloseSqlForm = async (done) => {
           }"
         >
           <el-select
-
+              class="content-select"
               v-model="domain.typeAndsize"
               :disabled="index === 0"
               placeholder="数据类型和长度"
@@ -468,9 +465,10 @@ const beforeCloseSqlForm = async (done) => {
         </el-form-item>
       </el-col>
       <!--      3默认值-->
-      <el-col :span="3">
+      <el-col class="form-content-col" :span="3">
         <el-form-item :key="domain.key2" :prop="'domains.' + index + '.defaultValue'">
           <el-input
+              class="content-input"
               v-model="domain.defaultValue"
               placeholder="请输入默认值"
               :disabled="index === 0"
@@ -478,7 +476,7 @@ const beforeCloseSqlForm = async (done) => {
         </el-form-item>
       </el-col>
       <!--      4字段注释-->
-      <el-col :span="3">
+      <el-col class="form-content-col" :span="3">
         <el-form-item
 
             :key="domain.key3"
@@ -489,11 +487,13 @@ const beforeCloseSqlForm = async (done) => {
             trigger: 'blur'
           }"
         >
-          <el-input v-model="domain.description" placeholder="字段注释" :disabled="index === 0"/>
+          <el-input
+              class="content-input"
+              v-model="domain.description" placeholder="字段注释" :disabled="index === 0"/>
         </el-form-item>
       </el-col>
       <!--      5表单类型-->
-      <el-col :span="3">
+      <el-col class="form-content-col" :span="3">
         <el-form-item
             :key="domain.key4"
             :prop="'domains.' + index + '.formComponent'"
@@ -504,6 +504,7 @@ const beforeCloseSqlForm = async (done) => {
           }"
         >
           <el-select
+              class="content-select"
               v-model="domain.formComponent"
               :disabled="index === 0||domain.relevance!=null&&domain.relevance.length>0"
               v-if="isChangeCascader"
@@ -526,13 +527,14 @@ const beforeCloseSqlForm = async (done) => {
         </el-form-item>
       </el-col>
       <!--      6关联表信息 -->
-      <el-col :span="3">
+      <el-col class="form-content-col" :span="3">
         <el-form-item
             :label-width="10"
             :key="domain.key5"
             :prop="'domains.' + index + '.relevance'"
         >
           <el-cascader
+              class="content-cascader"
               v-model="domain.relevance"
               :options="options"
               :props="props"
@@ -543,7 +545,7 @@ const beforeCloseSqlForm = async (done) => {
         </el-form-item>
       </el-col>
       <!--      7是否校验-->
-      <el-col :span="1">
+      <el-col class="form-content-col" :span="1">
         <el-form-item
 
             :key="domain.key6"
@@ -559,7 +561,7 @@ const beforeCloseSqlForm = async (done) => {
         </el-form-item>
       </el-col>
       <!--      8是否展示表单-->
-      <el-col :span="1">
+      <el-col class="form-content-col" :span="1">
         <el-form-item
             :key="domain.key7"
             :prop="'domains.' + index + '.isShow'"
@@ -569,7 +571,7 @@ const beforeCloseSqlForm = async (done) => {
         </el-form-item>
       </el-col>
       <!--    9是否加入查询  -->
-      <el-col :span="1">
+      <el-col class="form-content-col" :span="1">
         <el-form-item
             :key="domain.key7"
             :prop="'domains.' + index + '.isShow'"
@@ -578,7 +580,7 @@ const beforeCloseSqlForm = async (done) => {
         </el-form-item>
       </el-col>
       <!--     10       操作按钮-->
-      <el-col :span="1">
+      <el-col class="form-content-col" :span="1">
         <el-popconfirm
             confirm-button-text="确认"
             cancel-button-text="取消"
@@ -665,7 +667,7 @@ const beforeCloseSqlForm = async (done) => {
 //}
 
 .form-content {
-  .el-col {
+  .form-content-col {
     .el-form-item__content {
       display: flex;
       width: 100%;
@@ -674,9 +676,9 @@ const beforeCloseSqlForm = async (done) => {
 
     }
 
-    .el-select,
-    .el-cascader,
-    .el-input {
+    .content-select,
+    .content-cascader,
+    .content-input {
       width: 100%;
     }
 

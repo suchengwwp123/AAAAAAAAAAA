@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * @program: authority-2026.0.2
+ * @program: authority-2026.0.3
  * @ClassName 文件上传 实体类
  * @description:
  * @author: dyy

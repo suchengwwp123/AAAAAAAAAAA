@@ -92,6 +92,18 @@ public class GeneratorServiceImpl implements GeneratorService {
 
     /**
      * 构建代码方法
+     * 1.判断表名字是否符合规范
+     * 2.判断表是否为系统表，如果是系统表则无法覆盖掉
+     * 3.先校验上传的数据是否存在逻辑错误，如果存在逻辑错误，则返回错误信息
+     * 4.生成数据库表
+     * 5.克隆数据，保留原始的数据
+     * 6.对克隆的数据进行驼峰化
+     * 7.生成后端代码
+     * 8.生成前端代码
+     * 9.生成权限数据
+     * 10.生成文档
+     * 11.保存记录
+     *
      *
      * @param generatorDto
      * @throws SQLException
@@ -111,11 +123,22 @@ public class GeneratorServiceImpl implements GeneratorService {
 
 //        生成代码方法start
 //        克隆一个对象 对原始的对象值不污染
-        System.out.println("1"+JSONUtil.toJsonStr(generatorDto));
+
         GeneratorDto generatorDtoCreate = ObjectUtil.cloneByStream(generatorDto);
         //        表创建完毕以后，对所有字段进行转驼峰,保留原始的，回显的时候使用
         generatorDtoCreate.setDomains(generatorDtoCreate.getDomains().stream().map(sqlDto ->
                 {
+                    // todo 如果需要查询，则需要设置查询名和查询数据剋行
+                    if (sqlDto.getIsSearch()) {
+                        sqlDto.setSearchType(this.converTypeAndSizeToObjectType(sqlDto.getTypeAndsize()));
+                        sqlDto.setSearchName(StrUtil.toCamelCase(sqlDto.getName()));
+                    }
+                    //todo 如果不需要属性，则需要设置值为默认值
+                    if (!sqlDto.getIsSearch()) {
+                        sqlDto.setSearchType(null);
+                        sqlDto.setSearchName(null);
+                    }
+
                     sqlDto.setName(StrUtil.toCamelCase(sqlDto.getName()));
                     if (StrUtil.isNotEmpty(sqlDto.getName())) {
                         String capitalized = StrUtil.upperFirst(sqlDto.getName()); // 首字母大写
@@ -126,13 +149,12 @@ public class GeneratorServiceImpl implements GeneratorService {
                     return sqlDto; // 返回修改后的对象
                 }
         ).collect(Collectors.toList()));
-        System.out.println("2"+JSONUtil.toJsonStr(generatorDto));
+
         this.generatorBackendCode(generatorDtoCreate.getTableName(), generatorDtoCreate.getDomains());
         this.generatorFrontCode(generatorDtoCreate);
-        //      生成代码end
 //        保存的为原始用户提交的记录，方便回显
         this.generatorPermissons(generatorDto);
-        System.out.println("3"+JSONUtil.toJsonStr(generatorDto));
+
         this.saveRecord(generatorDto);
         this.documentGeneration();
 
@@ -244,7 +266,7 @@ public class GeneratorServiceImpl implements GeneratorService {
     private void generatorFrontCode(GeneratorDto generatorDto) throws IOException {
 
 
-       //        设置velocity的资源加载器
+        //        设置velocity的资源加载器
         Properties properties = new Properties();
         properties.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
         //        初始化velocity引擎
@@ -281,7 +303,6 @@ public class GeneratorServiceImpl implements GeneratorService {
         tpl.merge(context, fw);
         //释放资源
         fw.close();
-
         log.info("前端vue代码生成成功");
 
 
@@ -360,7 +381,6 @@ public class GeneratorServiceImpl implements GeneratorService {
                 .execute();
         log.info("后端SpringBoot代码生成成功");
     }
-
 
 
     /**
@@ -460,7 +480,6 @@ public class GeneratorServiceImpl implements GeneratorService {
                     sqlDto.setColumnType("Long");
                     sqlDto.setDictId(Long.valueOf(sqlDto.getRelevance()[1]));
                     sqlDto.setSetRMethod(StrUtil.upperFirst(sqlDto.getName()) + "Dict");
-
                 } else if (sqlDto.getRelevance().length == 3) {
 
 
@@ -488,16 +507,6 @@ public class GeneratorServiceImpl implements GeneratorService {
             }
 
 
-            // todo 如果需要查询，则需要设置查询名和查询数据剋行
-            if (sqlDto.getIsSearch()) {
-                sqlDto.setSearchType(this.converTypeAndSizeToObjectType(sqlDto.getTypeAndsize()));
-                sqlDto.setSearchName(sqlDto.getName());
-            }
-            //todo 如果不需要属性，则需要设置值为默认值
-            if (!sqlDto.getIsSearch()) {
-                sqlDto.setSearchType(null);
-                sqlDto.setSearchName(null);
-            }
         }
         // todo 使用流检查 entityClass 是否有重复，过滤掉 ""和 null
         Map<String, Long> entityClassCount = generatorDto.getDomains().stream()
@@ -509,7 +518,6 @@ public class GeneratorServiceImpl implements GeneratorService {
         if (hasDuplicates) {
             throw new RuntimeException("字段中存在相同的关联数据库表，请及时修改！");
         }
-
         // todo  创建数据库表,后续需要加入对表的校验
         String sql = "";
         sql += "CREATE TABLE `" + generatorDto.getTableName() + "` (\n";
@@ -529,8 +537,6 @@ public class GeneratorServiceImpl implements GeneratorService {
         }
         sql += "PRIMARY KEY (`id`) USING BTREE \n";
         sql += ") ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='" + generatorDto.getDescription() + "';\n\n\n";
-
-
 
         return sql;
     }
@@ -708,7 +714,16 @@ public class GeneratorServiceImpl implements GeneratorService {
                         List<String> trimmedArgs = args.stream()
                                 .map(String::trim)
                                 .collect(Collectors.toList());
-                        normalizedType = columnType + "(" + String.join("", trimmedArgs) + ")";
+                        // 不需要拼接参数的类型集合
+                        Set<String> noArgsTypes = Set.of("text", "longtext", "datetime");
+
+                        if (args != null && !args.isEmpty() && !noArgsTypes.contains(columnType.toLowerCase())) {
+                            normalizedType = columnType + "(" + String.join("", args) + ")";
+                        } else {
+                            normalizedType = columnType;
+                        }
+
+// 去除空格
                         normalizedType = normalizedType.replaceAll("\\s+", "");
                     } else {
                         normalizedType = columnType;
@@ -725,10 +740,10 @@ public class GeneratorServiceImpl implements GeneratorService {
 
                 if (!allMatch) {
 
-                        throw new RuntimeException("存在不支持的字段类型和长度，系统暂时支持的为:" + Arrays.stream(ColumnTypeEnum.values())
-                                .map(type -> type.getValue())
-                                .collect(Collectors.joining("-")));
-                    }
+                    throw new RuntimeException("存在不支持的字段类型和长度，系统暂时支持的为:" + Arrays.stream(ColumnTypeEnum.values())
+                            .map(type -> type.getValue())
+                            .collect(Collectors.joining("-")));
+                }
 
                 List<SqlDto> sqlDtos = columns.stream().map(column -> {
                     ColDataType colDataType = column.getColDataType();
@@ -760,6 +775,9 @@ public class GeneratorServiceImpl implements GeneratorService {
                         dto.setIsShow(true);
                     }
                     dto.setFormComponent("input");
+                    if ("id".equals(dto.getName())) {
+                        dto.setFormComponent("input");
+                    }
                     List<String> specs = column.getColumnSpecs();
                     String defaultValue = IntStream.range(0, specs.size() - 1)
                             .filter(i -> "DEFAULT".equalsIgnoreCase(specs.get(i)))

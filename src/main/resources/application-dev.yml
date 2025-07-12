@@ -6,14 +6,14 @@ server:
 
 spring:
   application:
-    name: authority-2026.0.2
+    name: authority-2026.0.3
   ai:
     ollama:
       base: http://localhost:11434
       chat:
         model: deepseek-r1:8b
     deepseek:
-      api-key: sk-22f8a3957aa14e12b8fe417a8643e281
+      api-key: sk-0f5da4576cd5419781aa17e0783fc818
       base-url: https://api.deepseek.com/v1
       model: deepseek-chat
       chat:
@@ -22,7 +22,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost:3306/authority-2026.0.2?allowPublicKeyRetrieval=true&useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/authority-2026.0.3?allowPublicKeyRetrieval=true&useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: root
     password: root
     # 以下是druid配置
@@ -150,11 +150,21 @@ sa-token:
   # token 风格（默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik）
   token-style: random-128
   # 是否输出操作日志
-  is-log: true
+  is-log: false
   is-read-cookie: false
 
 files:
   upload:
     path: D:\files\
+    #访问前缀
+    urlprefix: http://localhost:9090/files/
+    #压缩比例
+    outputquality: 1
 
 
+xss:
+  enabled: true         # 是否开启XSS防护
+  mode: CLEAN           # CLEAN = 使用Jsoup清洗，ESCAPE = 替换特殊字符
+  excludes:
+  url-patterns:
+    - /*

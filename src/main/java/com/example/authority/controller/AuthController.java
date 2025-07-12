@@ -46,7 +46,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * @program: authority-2026.0.2
+ * @program: authority-2026.0.3
  * @ClassName:AuthController
  * @description: 认证处理控制器
  * @author:dyy
@@ -101,6 +101,7 @@ public class AuthController {
     @PostMapping("/login")
     @IgnoreParam
     @IgoreResult
+
     public SaResult doLogin(@RequestBody LoginDto loginDto) throws Exception {
         //RSA解密
         String decryptedPassword = RSAUtil.decrypt(loginDto.getPassword(), rsaKeyProperties.getPrivateKey());

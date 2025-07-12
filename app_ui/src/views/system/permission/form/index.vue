@@ -4,6 +4,8 @@ import {nextTick, reactive, ref} from 'vue'
 import request from '@/utils/request'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import {CircleCloseFilled} from '@element-plus/icons-vue'
+import pinia from "@/stores/store";
+import useSystemStore from "@/stores/system";
 
 // 组件传值
 const props = defineProps(['dialogVisible', 'id'])
@@ -20,6 +22,7 @@ const form = reactive({
   statu: 1,
   hidden: false
 })
+const systemStore = useSystemStore(pinia)
 // 表单规则
 const rules = reactive({
   orderNum: [{required: true, message: '必选项不能为空', trigger: 'blur'}],
@@ -89,12 +92,13 @@ const handleSumbmitForm = async (formEl) => {
         data: form
       })
       handleResetForm(formEl)
-      window.location.reload()
+
       ElMessage({
         showClose: true,
         message: '操作成功',
         type: 'success'
       })
+      setTimeout(()=>window.location.reload(),1000)
     }
   })
 }
@@ -183,7 +187,7 @@ export default {
 <template>
   <el-drawer
       :modelValue="dialogVisible"
-      size="40%"
+      :size="systemStore.windowWidth<=768?'100%':'40%'"
       :title="headerTitle"
       append-to-body
       :before-close="handleClose"

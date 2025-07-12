@@ -9,7 +9,7 @@ import java.lang.management.ManagementFactory;
 import java.text.DecimalFormat;
 
 /**
- * @program: authority-2026.0.2
+ * @program: authority-2026.0.3
  * @ClassName:SystemInformation
  * @description: 系统参数类
  * @author:dyy

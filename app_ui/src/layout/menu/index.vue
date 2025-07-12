@@ -1,10 +1,10 @@
 <script setup>
-import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 //获取父组件传递过来的全部路由数组
 defineProps(['menuList'])
 
 //获取路由器对象
-let $router = useRouter()
+let $route = useRoute()
 //点击菜单的回调
 </script>
 <script>

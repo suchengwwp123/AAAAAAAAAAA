@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 
 /**
- * @program: authority-2026.0.2
+ * @program: authority-2026.0.3
  * @ClassName:HistoryServiceImpl
  * @description: 聊天记录 service实现类
  * @author:dyy

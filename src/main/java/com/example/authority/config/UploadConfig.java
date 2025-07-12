@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * @program: authority-2026.0.2
+ * @program: authority-2026.0.3
  * @ClassName:UploadConfig
  * @description: 文件上传配置类
  * @author:dyy
@@ -39,7 +39,6 @@ public class UploadConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
         registry.addResourceHandler("/**")
                 .addResourceLocations("classpath:/META-INF/resources/", "classpath:/resources/", "classpath:/static/");
     }

@@ -16,11 +16,7 @@ const constrouters = [
     name: 'register',
     component: () => import('@/views/common/login/register.vue')
   },
-  {
-    path: '/dataline',
-    name: 'dataline',
-    component: () => import('@/views/common/dataline/index.vue')
-  },
+
   {
     path: '/front',
     name: 'front',
@@ -65,7 +61,7 @@ const getRouters = (data) => {
         {
           path: '/information',
           name: 'information',
-          component: import('@/views/common/information/index.vue'),
+          component:()=> import('@/views/common/information/index.vue'),
           meta: {
             icon: 'User',
             title: '个人信息',

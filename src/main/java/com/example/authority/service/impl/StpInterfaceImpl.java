@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @program: authority-2026.0.23
+ * @program: authority-2026.0.33
  * @ClassName:StpInterfaceImpl
  * @description: 自定义权限加载接口实现类
  * @author:dyy

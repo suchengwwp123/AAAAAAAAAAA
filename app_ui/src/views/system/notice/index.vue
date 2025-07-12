@@ -1,5 +1,5 @@
-<script setup >
-import { reactive, ref } from 'vue'
+<script setup>
+import {reactive, ref} from 'vue'
 import {
   CircleCloseFilled,
   Delete,
@@ -12,9 +12,11 @@ import {
   Upload
 } from '@element-plus/icons-vue'
 import request from '@/utils/request'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import {ElMessage, ElMessageBox} from 'element-plus'
 
 import downloadExcel from '@/utils/downloads'
+import pinia from "@/stores/store";
+import useSystemStore from "@/stores/system";
 
 // 名称
 const name = ref('')
@@ -34,7 +36,8 @@ const multipleSelection = ref([])
 const disabled = ref(true)
 // 是否展示弹框
 const dialogVisible = ref(false)
-
+// 数据仓库
+const systemStore = useSystemStore(pinia)
 // 表单数据定义
 const form = reactive({
   id: undefined,
@@ -51,21 +54,21 @@ const ruleFormRef = ref()
 
 // 表单校验规则
 const rules = reactive({
-  id: [{ required: true, message: '必选项不能为空', trigger: 'blur' }],
-  name: [{ required: true, message: '必选项不能为空', trigger: 'blur' }],
-  content: [{ required: true, message: '必选项不能为空', trigger: 'blur' }],
-  createTime: [{ required: true, message: '必选项不能为空', trigger: 'blur' }]
+  id: [{required: true, message: '必选项不能为空', trigger: 'blur'}],
+  name: [{required: true, message: '必选项不能为空', trigger: 'blur'}],
+  content: [{required: true, message: '必选项不能为空', trigger: 'blur'}],
+  createTime: [{required: true, message: '必选项不能为空', trigger: 'blur'}]
 })
 
 //新增方法
 const handleAdd = async () => {
-  headerTitle.value = reactive('新增公告')
+  headerTitle.value = '新增公告'
   dialogVisible.value = true
 }
 // 修改方法
 const handleUpdate = async (id) => {
   dialogVisible.value = true
-  headerTitle.value = reactive('编辑公告')
+  headerTitle.value = '编辑公告'
   const res = await request.get(`/notice/${id}`)
   Object.assign(form, res.data)
 }
@@ -135,15 +138,15 @@ const handleSelectionChange = (val) => {
 // 关闭弹框提示方法
 const handleClose = (done) => {
   ElMessageBox.confirm('确定关闭窗口?')
-    .then(() => {
-      handleResetForm(ruleFormRef.value)
-    })
-    .then(() => {
-      done()
-    })
-    .catch(() => {
-      // catch error
-    })
+      .then(() => {
+        handleResetForm(ruleFormRef.value)
+      })
+      .then(() => {
+        done()
+      })
+      .catch(() => {
+        // catch error
+      })
 }
 // 提交表单校验方法
 const handleSumbmitForm = async (formEl) => {
@@ -186,11 +189,11 @@ const beforeBatchUpload = async (file) => {
 const handleBatchExport = async () => {
   const ids = multipleSelection.value.map((row) => row.id)
   const res = await request(
-    {
-      url: `/notice/batch/export/${ids}`,
-      method: 'get',
-      responseType: 'blob'
-    } //在请求中加上这一行，特别重要
+      {
+        url: `/notice/batch/export/${ids}`,
+        method: 'get',
+        responseType: 'blob'
+      } //在请求中加上这一行，特别重要
   )
   downloadExcel(res, '导出数据表')
 }
@@ -211,33 +214,33 @@ const dowload = async (url) => {
 <template>
   <!--  编辑弹框-->
   <el-drawer
-    :modelValue="dialogVisible"
-    size="40%"
-    append-to-body
-    :title="headerTitle"
-    :before-close="handleClose"
+      :modelValue="dialogVisible"
+      :size="systemStore.windowWidth<=768?'100%':'40%'"
+      append-to-body
+      :title="headerTitle"
+      :before-close="handleClose"
   >
 
     <el-form
-      ref="ruleFormRef"
-      :model="form"
-      :rules="rules"
-      label-width="120px"
-      class="ruleForm"
-      :size="formSize"
-      status-icon
+        ref="ruleFormRef"
+        :model="form"
+        :rules="rules"
+        label-width="120px"
+        class="ruleForm"
+        :size="formSize"
+        status-icon
     >
       <el-form-item label="标题" prop="name">
-        <el-input v-model="form.name" />
+        <el-input v-model="form.name"/>
       </el-form-item>
       <el-form-item label="内容" prop="content">
-        <el-input v-model="form.content" type="textarea" />
+        <el-input v-model="form.content" type="textarea"/>
       </el-form-item>
     </el-form>
     <template #footer>
       <div class="el-drawer__footer-container--line">
         <el-button @click="handleResetForm(ruleFormRef)">取消</el-button>
-        <el-button type="primary" @click="handleSumbmitForm(ruleFormRef)"> 提交 </el-button>
+        <el-button type="primary" @click="handleSumbmitForm(ruleFormRef)"> 提交</el-button>
       </div>
     </template>
   </el-drawer>
@@ -264,7 +267,7 @@ const dowload = async (url) => {
       <!--   新增   -->
       <div v-permission="'sys:notice:add'">
         <el-button type="primary" :icon="Plus" @click="handleAdd" size="small" plain
-          >新增
+        >新增
         </el-button>
       </div>
       <!--   批量导入   -->
@@ -276,17 +279,17 @@ const dowload = async (url) => {
       <!--   批量删除   -->
       <div v-permission="'sys:notice:batch:delete'">
         <el-popconfirm
-          confirm-button-text="确定"
-          cancel-button-text="取消"
-          :icon="InfoFilled"
-          icon-color="#626AEF"
-          title="确认要批量删除吗？"
-          @confirm="handleBatchDel"
-          @cancel="load"
+            confirm-button-text="确定"
+            cancel-button-text="取消"
+            :icon="InfoFilled"
+            icon-color="#626AEF"
+            title="确认要批量删除吗？"
+            @confirm="handleBatchDel"
+            @cancel="load"
         >
           <template #reference>
             <el-button type="danger" :disabled="disabled" :icon="Delete" size="small" plain
-              >批量删除
+            >批量删除
             </el-button>
           </template>
         </el-popconfirm>
@@ -294,54 +297,59 @@ const dowload = async (url) => {
 
       <div v-permission="'sys:notice:batch:export'">
         <el-button
-          type="warning"
-          :icon="Download"
-          :disabled="disabled"
-          size="small"
-          @click="handleBatchExport"
-          plain
-          >批量导出
+            type="warning"
+            :icon="Download"
+            :disabled="disabled"
+            size="small"
+            @click="handleBatchExport"
+            plain
+        >批量导出
         </el-button>
       </div>
     </el-col>
     <!--  表格页面-->
     <el-col>
       <el-table
-        :data="tableData"
-      class="page-table"
-        :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
-        @selection-change="handleSelectionChange"
+          :data="tableData"
+          class="page-table"
+          :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
+          @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" />
-        <el-table-column type="index"  label="序号" align="center"  width="70"  />
+        <el-table-column type="selection" width="55"/>
+        <el-table-column type="index" label="序号" align="center" width="70"/>
         <el-table-column prop="name" label="标题" align="center" show-overflow-tooltip/>
-        <el-table-column prop="content" label="内容" align="center" show-overflow-tooltip />
-        <el-table-column prop="createTime" label="创建时间" align="center" show-overflow-tooltip />
+        <el-table-column prop="content" label="内容" align="center" show-overflow-tooltip>
+          <template #default="scope">
+
+            <div v-html="scope.row.content"></div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="createTime" label="创建时间" align="center" show-overflow-tooltip/>
 
         <el-table-column label="操作" align="center"
-        width="240"
+                         width="240"
         >
           <template #default="scope">
             <div class="page-table-editout--layout">
               <div>
                 <el-button
-                  type="primary"
-                  :icon="Edit"
-                  size="small"
-                  @click="handleUpdate(scope.row.id)"
-                  v-permission="'sys:notice:update'"
-                  >编辑
+                    type="primary"
+                    :icon="Edit"
+                    size="small"
+                    @click="handleUpdate(scope.row.id)"
+                    v-permission="'sys:notice:update'"
+                >编辑
                 </el-button>
               </div>
               <div v-permission="'sys:notice:delete'">
                 <el-popconfirm
-                  confirm-button-text="确定"
-                  cancel-button-text="取消"
-                  :icon="InfoFilled"
-                  icon-color="#626AEF"
-                  title="确认要删除吗？"
-                  @confirm="handleDel(scope.row.id)"
-                  @cancel="load"
+                    confirm-button-text="确定"
+                    cancel-button-text="取消"
+                    :icon="InfoFilled"
+                    icon-color="#626AEF"
+                    title="确认要删除吗？"
+                    @confirm="handleDel(scope.row.id)"
+                    @cancel="load"
                 >
                   <template #reference>
                     <el-button type="danger" :icon="Delete" size="small">删除</el-button>
@@ -355,14 +363,14 @@ const dowload = async (url) => {
       <!--      分页按钮-->
       <div class="page-pagination">
         <el-pagination
-          :current-page="pageNum"
-          :page-size="pageSize"
-          :page-sizes="[10, 20, 30, 50, 100, 500, 1000]"
+            :current-page="pageNum"
+            :page-size="pageSize"
+            :page-sizes="[10, 20, 30, 50, 100, 500, 1000]"
 
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="Number(total)"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="Number(total)"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
         />
       </div>
     </el-col>

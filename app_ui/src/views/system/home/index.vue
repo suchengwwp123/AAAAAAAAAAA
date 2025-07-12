@@ -3,7 +3,7 @@ import request from '@/utils/request'
 
 import Cache from '@/views/monitor/cache/index.vue'
 import * as echarts from 'echarts';
-import {onBeforeMount, onBeforeUnmount, onMounted, reactive, ref} from 'vue'
+import {onBeforeMount, onBeforeUnmount, onMounted, reactive, ref, watch} from 'vue'
 import pinia from "@/stores/store";
 import useSystemStore from "@/stores/system";
 import {Refresh, Search} from "@element-plus/icons-vue";
@@ -15,7 +15,7 @@ const systemStore = useSystemStore(pinia)
 const currentDay = ref('7')
 //公告数组
 const notices = ref([])
-const app_name=import.meta.env.VITE_LOGIN_NAME
+const app_name = import.meta.env.VITE_LOGIN_NAME
 
 onMounted(async () => {
   await monitorload()
@@ -30,12 +30,15 @@ const load = async () => {
   const res = await request.get('/notice')
   notices.value = res.data
 }
+let monitorChart = null
+let viewChart = null
+
 // 获取系统监控数据
 const monitorload = async () => {
   const res = await request.get('/system/resource')
 
   var chartDom = document.getElementById('monitor');
-  var myChart = echarts.init(chartDom);
+  monitorChart = echarts.init(chartDom);
   var option;
 
   const gaugeData = [
@@ -114,7 +117,7 @@ const monitorload = async () => {
   };
 
 
-  option && myChart.setOption(option);
+  option && monitorChart.setOption(option);
 }
 // 获取访问数据请去
 const viewload = async () => {
@@ -122,7 +125,7 @@ const viewload = async () => {
   const res = await request.get(`/log/echarts/${currentDay.value}`)
 
   var chartDom = document.getElementById('view');
-  var myChart = echarts.init(chartDom);
+  viewChart = echarts.init(chartDom);
   var option;
 
 
@@ -143,9 +146,15 @@ const viewload = async () => {
     ]
   };
 
-  option && myChart.setOption(option);
+  option && viewChart.setOption(option);
 }
+watch(() => systemStore.windowWidth,
+    (newValue, oldValue)=>{
+      monitorChart.resize()
+      viewChart.resize()
+    }
 
+)
 
 // 格式化日期函数
 const formatTime = (date) => {
@@ -165,6 +174,7 @@ const handleReset = async () => {
   currentDay.value = 7
   await viewload()
 }
+
 </script>
 
 <template>
@@ -177,7 +187,7 @@ const handleReset = async () => {
         <el-row>
           <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
             <div class="home-card-welcome__left">
-              <el-avatar :src="systemStore.userInfo.avatar"></el-avatar>
+              <el-image :src="systemStore.userInfo.avatar"></el-image>
               <div>
                 <div>
                   <el-text size="large" class="home-card-welcome__left-hello">Hello~{{
@@ -185,7 +195,7 @@ const handleReset = async () => {
                     }},
                   </el-text>
                   <el-text size="large" class="home-card-welcome__left-system">欢迎使用 {{
-                    app_name
+                      app_name
                     }}
                   </el-text>
                 </div>
@@ -194,6 +204,7 @@ const handleReset = async () => {
                 </div>
               </div>
             </div>
+
           </el-col>
           <el-col :xs="0" :sm="0" :md="0" :lg="12" :xl="12"
 
@@ -214,6 +225,7 @@ const handleReset = async () => {
                   </el-radio-group>
                 </el-form-item>
                 <el-form-item>
+
                   <el-button type="primary" :icon="Search" @click="viewload">查询</el-button>
                   <el-button type="warning" :icon="Refresh" @click="handleReset">重置</el-button>
                 </el-form-item>
@@ -303,6 +315,12 @@ const handleReset = async () => {
       align-items: center;
       gap: 16px;
       height: 50px;
+
+      .el-image {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+      }
 
 
       .home-card-welcome__left-hello {

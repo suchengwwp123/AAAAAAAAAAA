@@ -1,16 +1,17 @@
 <script setup>
 
-import {RouterLink, useRouter} from 'vue-router';
+import {useRoute} from 'vue-router';
 import {reactive, ref, watch} from 'vue';
-import useSystemStore from "@/stores/system";
-import pinia from "@/stores/store";
-import router from "@/router";
 
-const $route = router
+
+const $route = useRoute()
 const show = ref(true)
-
+/**
+ * 整体性路由使用$router
+ * 单个路由对象使用$route
+ */
 watch(
-    () => $route.currentRoute.value.fullPath,
+    () => $route.path,
     (newPath, oldPath) => {
       show.value=false
       setTimeout(() => show.value = true, 100)

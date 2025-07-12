@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @program: authority-2026.0.2
+ * @program: authority-2026.0.3
  * @ClassName:SpringDocConfig
  * @description: 接口文档SwaagerUI的配置类
  * 主要是配置Swaager页面的一些页面介绍参数等等

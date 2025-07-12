@@ -70,13 +70,13 @@ const rules = reactive({
 
 //新增方法
 const handleAdd = async () => {
-  headerTitle.value = reactive('新增数据')
+  headerTitle.value = '新增数据'
   dialogVisible.value = true
 }
 // 修改方法
 const handleUpdate = async (id) => {
   dialogVisible.value = true
-  headerTitle.value = reactive('返回结果')
+  headerTitle.value = '返回结果'
   const res = await request.get(`/log/${id}`)
   Object.assign(form, res.data)
 }
@@ -330,10 +330,10 @@ const dowload = async (url) => {
         <el-table-column prop="os" label="操作系统" align="center" show-overflow-tooltip/>
 
         <el-table-column prop="createTime" label="创建时间" align="center"
-                         width="200"
+                     show-overflow-tooltip
 
         />
-        <el-table-column prop="ip" label="Ip" align="center"/>
+        <el-table-column prop="ip" label="Ip" align="center" show-overflow-tooltip/>
 
         <el-table-column prop="taketime" label="耗时" align="center">
           <template #default="scope">

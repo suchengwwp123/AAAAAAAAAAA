@@ -1,6 +1,6 @@
 {
   "name": "app_ui",
-  "version": "2026.0.2",
+  "version": "2026.0.3",
   "private": true,
   "scripts": {
     "dev": "vite --open --mode dev",
@@ -30,7 +30,7 @@
     "openai": "^5.8.2",
     "pinia": "^2.1.6",
     "qs": "^6.11.2",
-    "sass": "^1.66.1",
+    "sass": "1.62.1",
     "tdesign-icons-vue-next": "^0.3.6",
     "tdesign-vue-next": "^1.14.1",
     "vue": "^3.5.13",

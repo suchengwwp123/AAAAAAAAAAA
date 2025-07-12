@@ -11,6 +11,7 @@ import com.example.authority.annotations.IgoreResult;
 
 import com.example.authority.service.LogService;
 import com.example.authority.service.UserService;
+import eu.bitwalker.useragentutils.UserAgent;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ import java.util.Arrays;
 
 
 /**
- * @program: authority-2026.0.2
+ * @program: authority-2026.0.3
  * @ClassName: LogAspect
  * @description: 日志注解拦截器
  * @author:dyy
@@ -120,7 +121,6 @@ public class LogAspect {
      */
     private String getRequestIpAddress() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-
         // 从X-Forwarded-For中获取真实IP地址
         String ip = request.getHeader("X-Forwarded-For");
 
@@ -169,47 +169,21 @@ public class LogAspect {
         if (userAgent == null) {
             return "Unknown";
         }
+        UserAgent userAgents = UserAgent.parseUserAgentString(userAgent);
 
-        userAgent = userAgent.toLowerCase();
 
-        if (userAgent.contains("edg")) {
-            return "Microsoft Edge";
-        } else if (userAgent.contains("msie") || userAgent.contains("trident")) {
-            return "Internet Explorer";
-        } else if (userAgent.contains("firefox")) {
-            return "Firefox";
-        } else if (userAgent.contains("chrome") && !userAgent.contains("edg")) {
-            return "Chrome";
-        } else if (userAgent.contains("safari") && !userAgent.contains("chrome")) {
-            return "Safari";
-        } else if (userAgent.contains("opera") || userAgent.contains("opr")) {
-            return "Opera";
-        } else {
-            return "Other";
-        }
+        // 获取客户端浏览器
+        String browser = userAgents.getBrowser().getName();
+        return browser;
     }
     /**
      * 解析操作系统
      */
     private String getOperatingSystem(String userAgent) {
-        userAgent = userAgent.toLowerCase();
-
-        if (userAgent.contains("windows nt 10.0")) {
-            return "Windows 10";
-        } else if (userAgent.contains("windows nt 6.3")) {
-            return "Windows 8.1";
-        } else if (userAgent.contains("windows nt 6.1")) {
-            return "Windows 7";
-        } else if (userAgent.contains("mac os x")) {
-            return "Mac OS X";
-        } else if (userAgent.contains("android")) {
-            return "Android";
-        } else if (userAgent.contains("iphone")) {
-            return "iOS";
-        } else if (userAgent.contains("linux")) {
-            return "Linux";
-        }
-        return "Other";
+        UserAgent userAgents = UserAgent.parseUserAgentString(userAgent);
+        // 获取客户端操作系统
+        String os = userAgents.getOperatingSystem().getName();
+        return os;
     }
 
 

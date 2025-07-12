@@ -16,7 +16,7 @@ import java.io.Serializable;
 
 
 /**
- * @program: authority-2026.0.2
+ * @program: authority-2026.0.3
  * @ClassName:UserServiceImpl
  * @description: 用户表 service实现类
  * @author:dyy

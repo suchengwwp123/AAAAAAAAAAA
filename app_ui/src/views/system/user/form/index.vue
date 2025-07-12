@@ -46,9 +46,12 @@ const isCheckAllKeys = ref(false)
 // 表单规则
 const rules = reactive({
   username: [
-    {required: true, message: '输入账户名', trigger: 'blur'},
-    {min: 5, max: 10, message: '长度在5到10位之间', trigger: 'blur'},
-    { pattern: /^[a-zA-Z]+$/, message: '只能输入英文字符', trigger: 'blur' }
+    {required: true, message: '请输入账户名', trigger: 'blur'},
+    {
+      pattern: /^(?!\d+$)[A-Za-z\d]{5,10}$/,
+      message: '账户名必须是5到10位字母或字母数字组合',
+      trigger: 'blur'
+    }
   ],
   nickname: [{required: true, message: '必选项不能为空', trigger: 'blur'},
     {min: 2, max: 5, message: '长度在2到5位之间', trigger: 'blur'}
@@ -212,6 +215,7 @@ defineExpose({
   handleGetForm,
   handleGetTrees
 })
+
 </script>
 <script>
 export default {
@@ -219,99 +223,98 @@ export default {
 }
 </script>
 <template>
-<div >
-  <el-drawer
-      :modelValue="dialogVisible"
-      append-to-body
-      size="40%"
-      :title="headerTitle"
-      :before-close="handleClose"
+  <div>
+    <el-drawer
+        :modelValue="dialogVisible"
+        append-to-body
+        :size="systemStore.windowWidth<=768?'100%':'40%'"
+        :title="headerTitle"
+        :before-close="handleClose"
 
-  >
-
-    <el-form
-        ref="ruleFormRef"
-        :model="form"
-        :rules="rules"
-        label-width="120px"
-        class="ruleForm"
-        :size="formSize"
-        status-icon
     >
-      <el-form-item label="账户名" prop="username">
-        <el-input v-model="form.username" :disabled="form.id"/>
-        <el-alert title="默认密码为12345" type="success" :closable="false"/>
-      </el-form-item>
-      <el-form-item label="用户昵称" prop="nickname">
-        <el-input v-model="form.nickname"/>
-      </el-form-item>
 
-      <el-form-item label="用户头像" prop="avatar">
-        <el-upload
-            class="avatar-uploader"
-            :show-file-list="false"
-            :before-upload="handleAvatarSuccess"
-        >
-          <el-avatar :size="30" v-if="form.avatar" :src="form.avatar"/>
-          <el-icon v-else class="avatar-uploader-icon">
-            <Plus/>
-          </el-icon>
-        </el-upload>
-      </el-form-item>
-      <el-form-item label="手机号码" prop="phone">
-        <el-input v-model="form.phone"/>
-      </el-form-item>
+      <el-form
+          ref="ruleFormRef"
+          :model="form"
+          :rules="rules"
+          label-width="120px"
+          class="ruleForm"
+          :size="formSize"
+          status-icon
+      >
+        <el-form-item label="账户名" prop="username">
+          <el-input v-model="form.username" :disabled="form.id"/>
+          <el-alert title="默认密码为12345" type="success" :closable="false"/>
+        </el-form-item>
+        <el-form-item label="用户昵称" prop="nickname">
+          <el-input v-model="form.nickname"/>
+        </el-form-item>
+
+        <el-form-item label="用户头像" prop="avatar">
+          <el-upload
+              class="avatar-uploader"
+              :show-file-list="false"
+              :before-upload="handleAvatarSuccess"
+          >
+            <el-avatar :size="30" v-if="form.avatar" :src="form.avatar"/>
+            <el-icon v-else class="avatar-uploader-icon">
+              <Plus/>
+            </el-icon>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="手机号码" prop="phone">
+          <el-input v-model="form.phone"/>
+        </el-form-item>
 
 
-      <el-form-item label="个人邮箱" prop="email">
-        <el-input v-model="form.email"/>
-      </el-form-item>
-      <el-form-item label="角色信息">
-        <div>
-          <el-checkbox
-              v-model="isExpandAll"
-              @change="handleDefaultExpandAll"
-              label="折叠/展开"
-              size="default"
+        <el-form-item label="个人邮箱" prop="email">
+          <el-input v-model="form.email"/>
+        </el-form-item>
+        <el-form-item label="角色信息">
+          <div>
+            <el-checkbox
+                v-model="isExpandAll"
+                @change="handleDefaultExpandAll"
+                label="折叠/展开"
+                size="default"
+            />
+            <el-checkbox
+                v-model="isCheckAllKeys"
+                @change="handleCheckedTreesAll"
+                label="全选/全不选"
+                size="default"
+            />
+          </div>
+
+          <div style="border: 1px #d4d7de solid; width: 100%; border-radius: 4px">
+            <el-tree
+                ref="treeRef"
+                :data="treeData"
+                v-if="refreshTree"
+                :default-expand-all="isExpandAll"
+                show-checkbox
+                node-key="id"
+                highlight-current
+                :check-strictly="isCheckStrictly"
+                :props="defaultProps"
+            />
+            <el-alert title="默认角色为普通用户" type="success" :closable="false"/>
+          </div>
+        </el-form-item>
+
+        <el-form-item label="当前状态" prop="statu">
+          <el-switch
+              v-model="form.statu"
+              :active-value="1"
+              :inactive-value="0"
+              inline-prompt
+              active-text="正常"
+              inactive-text="禁用"
+              style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
           />
-          <el-checkbox
-              v-model="isCheckAllKeys"
-              @change="handleCheckedTreesAll"
-              label="全选/全不选"
-              size="default"
-          />
-        </div>
-
-        <div style="border: 1px #d4d7de solid; width: 100%; border-radius: 4px">
-          <el-tree
-              ref="treeRef"
-              :data="treeData"
-              v-if="refreshTree"
-              :default-expand-all="isExpandAll"
-              show-checkbox
-              node-key="id"
-              highlight-current
-              :check-strictly="isCheckStrictly"
-              :props="defaultProps"
-          />
-          <el-alert title="默认角色为普通用户" type="success" :closable="false"/>
-        </div>
-      </el-form-item>
-
-      <el-form-item label="当前状态" prop="statu">
-        <el-switch
-            v-model="form.statu"
-            :active-value="1"
-            :inactive-value="0"
-            inline-prompt
-            active-text="正常"
-            inactive-text="禁用"
-            style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
-        />
-      </el-form-item>
-    </el-form>
-    <template #footer>
-
+        </el-form-item>
+      </el-form>
+      <template #footer>
 
 
         <div class="el-drawer__footer-container--line">
@@ -320,10 +323,9 @@ export default {
         </div>
 
 
-
-    </template>
-  </el-drawer>
-</div>
+      </template>
+    </el-drawer>
+  </div>
 </template>
 
 <style scoped lang="scss">

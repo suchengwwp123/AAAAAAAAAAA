@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 
 /**
- * @program: authority-2026.0.2
+ * @program: authority-2026.0.3
  * @ClassName:Notice
  * @description: 系统公告 实体类
  * @author:dyy

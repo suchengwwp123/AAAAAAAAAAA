@@ -2,8 +2,9 @@
 import {ref, watch} from 'vue'
 import useSystemStore from '@/stores/system'
 import router from '@/router'
+import {useRoute} from "vue-router";
 
-const $route = router
+const $router =router
 const systemStore = useSystemStore()
 const fold = ref(systemStore.fold)
 
@@ -18,7 +19,7 @@ watch(() => systemStore.fold, (newVal) => {
   }, 0)
 })
 const goHome = () => {
-  $route.push('/')
+  $router.push('/')
 }
 </script>
 
@@ -28,7 +29,7 @@ const goHome = () => {
     <el-image
         :key="fold ? 'fold' : 'unfold'"
         class="layout-menu__logo-icon"
-        src="./logo.png"/>
+        src="/logo.png"/>
     <span class="layout-menu__logo-systemname" v-if="!fold">{{ layoout_name}}</span>
   </div>
 </template>

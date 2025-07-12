@@ -31,7 +31,7 @@ import com.example.authority.entity.History;
 
 
 /**
- * @program: authority-2026.0.2
+ * @program: authority-2026.0.3
  * @ClassName:HistoryController
  * @description: HistoryController前端控制器
  * @author:dyy
@@ -105,7 +105,7 @@ public class HistoryController {
                         .build();
             } else {
                 chatHistoryDto = ChatHistoryDto.builder()
-                        .avatar("https://tc.z.wiki/autoupload/GTpps48LCGRYU4_b7BixAPYRolZAPaDOGvgAk665t4Kyl5f0KlZfm6UsKj-HyTuv/20250629/DDRr/1415X1415/logo.png")
+                        .avatar("/logo.png")
                         .name(history.getName())
                         .datetime(history.getDatetime())
                         .content(history.getContent())

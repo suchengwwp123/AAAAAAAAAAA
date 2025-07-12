@@ -81,10 +81,7 @@ const handleSumbmitForm = async (formEl) => {
         message: '操作成功',
         type: 'success'
       })
-      // handleResetForm(formEl)
-      // $route.replace('/login')
-      // localStorage.clear()
-      // systemStore.reset()
+
       window.location.reload()
     } else {
       console.log('error submit!', fields)
@@ -188,7 +185,7 @@ export default {
 <template>
   <el-drawer
       :modelValue="dialogVisible"
-      size="40%"
+      :size="systemStore.windowWidth<=768?'100%':'40%'"
       :title="headerTitle"
       :before-close="handleClose"
       append-to-body

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 
 /**
- * @program: authority-2026.0.2
+ * @program: authority-2026.0.3
  * @ClassName: AopAspect
  * @description: AopAspect自定义注解拦截器
  * @author:dyy

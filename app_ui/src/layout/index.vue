@@ -6,10 +6,10 @@ import Main from '@/layout/main/index.vue'
 import Logo from '@/layout/menu/logo/index.vue'
 import request from '@/utils/request'
 import router from "@/router";
-const $route=router
-
+import {useRoute} from "vue-router";
+const $router=router
+const $route=useRoute()
 const systemStore = useSystemStore()
-
 </script>
 <script>
 export default {
@@ -36,7 +36,7 @@ export default {
             :background-color="systemStore.backgroundColor"
             :text-color="systemStore.textColor"
             :collapse="systemStore.fold"
-            :default-active="$route.currentRoute.value.fullPath"
+            :default-active="$route.path"
             :collapse-transition="false"
             :active-text-color="systemStore.activeTextcolor"
             router
@@ -75,17 +75,17 @@ export default {
 
 .layout {
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
 
   .layout-menu {
     width: 200px;
-    height: 100vh;
+    height: 100dvh;
     overflow: auto;
-
+    position: fixed;
+    z-index: 1;
     &.fold {
       width: 64px;
     }
-
     transition: all 0.1s ease-in-out;
   }
 
@@ -97,12 +97,10 @@ export default {
     left: 200px;
     background-color: #fff;
     z-index: 1;
-
     &.fold {
       width: calc(100% - 64px);
       left: 64px;
     }
-
     transition: all 0.1s ease-in-out;
   }
 

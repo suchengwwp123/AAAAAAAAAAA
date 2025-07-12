@@ -4,7 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 /**
- * @program: authority-2026.0.2
+ * @program: authority-2026.0.3
  * @ClassName:MailBean
  * @description: 邮箱的实体类
  * @author:dyy

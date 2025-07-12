@@ -1,7 +1,7 @@
 package com.example.authority.entity.dto;
 
 /**
- * @program: authority-2026.0.2
+ * @program: authority-2026.0.3
  * @ClassName:Meta
  * @description: 路由封装数据
  * @author:dyy

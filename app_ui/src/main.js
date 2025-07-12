@@ -1,6 +1,5 @@
 import '@/styles/reset.css'
 import '@/styles/global.css'
-import '@/styles/theme.scss'
 import '@/styles/tailwind.css'
 import Antd from 'ant-design-vue';
 import TDesign from 'tdesign-vue-next';
@@ -9,8 +8,7 @@ import '@tdesign-vue-next/chat/es/style/index.css'; // 引入chat组件的少量
 // 导入elementui
 import 'ant-design-vue/dist/reset.css';
 import ElementPlus from 'element-plus'
-// import 'element-plus/dist/index.css'
-import '@/styles/theme.scss'
+import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import Directive from '@/utils/index'
 import locale from 'element-plus/es/locale/lang/zh-cn'

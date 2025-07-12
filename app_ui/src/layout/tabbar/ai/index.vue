@@ -1,5 +1,5 @@
 <script setup>
-import {onBeforeMount, onBeforeUnmount, onUnmounted, ref} from 'vue';
+import {onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, ref} from 'vue';
 import {SystemSumIcon} from 'tdesign-icons-vue-next';
 import pinia from "@/stores/store";
 import useSystemStore from "@/stores/system";
@@ -65,7 +65,7 @@ const inputEnter = async () => {
   isStreamLoad.value = true
   messages.value.unshift({
 
-    avatar: './logo.png',
+    avatar: '/logo.png',
     name: 'authority-ai',
     datetime: getCurrentTime(),
     content: ``,
@@ -105,7 +105,7 @@ const load = async () => {
   messages.value = res.data
   if (messages.value.length === 0) {
     const message = {
-      avatar: './logo.png',
+      avatar: '/logo.png',
       name: 'authority-ai',
       datetime: getCurrentTime(),
       content: '欢迎来到authority-ai小助手，请在此咨询您的问题',
@@ -155,6 +155,27 @@ const handleBeforeClose = async () => {
 defineExpose({
   load
 })
+const drawerSize = ref('900px')
+
+const updateDrawerSize = () => {
+  const width = window.innerWidth
+  if (width <= 768) {
+    drawerSize.value = '100%'
+  } else if (width <= 1024) {
+    drawerSize.value = '80%'
+  } else {
+    drawerSize.value = '900px'
+  }
+}
+
+onMounted(() => {
+  updateDrawerSize()
+  window.addEventListener('resize', updateDrawerSize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateDrawerSize)
+})
 </script>
 <script>
 export default {
@@ -166,7 +187,7 @@ export default {
       title="AI助手"
       :model-value="aidrawer"
       append-to-body
-      size="900px"
+      :size="drawerSize"
       :before-close="handleBeforeClose"
 
   >
@@ -246,12 +267,14 @@ export default {
 
 <style lang="less">
 .chat-container {
-  width: 768px;
+  width: 90%;
+  max-width: 900px;
   height: 80vh;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
 }
+
 
 .chat-body {
   flex: 1;
@@ -334,6 +357,12 @@ export default {
         color: var(--td-text-color-brand);
       }
     }
+  }
+}
+@media screen and (max-width: 768px) {
+  .chat-container {
+    width: 100%;
+    padding: 0 10px;
   }
 }
 </style>

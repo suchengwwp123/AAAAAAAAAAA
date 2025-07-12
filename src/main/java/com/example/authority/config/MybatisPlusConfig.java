@@ -8,7 +8,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 /**
- * @program: authority-2026.0.2
+ * @program: authority-2026.0.3
  * @ClassName:MybatisPlusConfig
  * @description: MybatisPlus配置
  * @author:dyy

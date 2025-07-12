@@ -14,6 +14,7 @@ const useSystemStore = defineStore('System', {
             userInfo: {},
             hasRouter: false,
             routers: [],
+            windowWidth: window.innerWidth,
             permissionPerms: [],
             backgroundColor: localStorage.getItem('bgc') ? localStorage.getItem('bgc') : import.meta.env.VITE_BG_COLOR,
             textColor: localStorage.getItem('tc') ? localStorage.getItem('tc') : import.meta.env.VITE_TEXT_COLOR,
@@ -53,6 +54,9 @@ const useSystemStore = defineStore('System', {
         },
         setAuthorities(permissionPerms) {
             this.permissionPerms = permissionPerms
+        },
+        updateWidth() {
+            this.windowWidth = window.innerWidth
         },
         reset() {
             localStorage.clear()

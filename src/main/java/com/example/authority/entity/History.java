@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
 
 
 /**
- * @program: authority-2026.0.2
+ * @program: authority-2026.0.3
  * @ClassName:History
  * @description: 聊天记录 实体类
  * @author:dyy

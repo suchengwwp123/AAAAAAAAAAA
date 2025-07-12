@@ -103,7 +103,7 @@ export default {
 <template>
   <el-drawer :model-value="drawer" title="系统外观配置"
              :before-close="handleBeforeClose"
-             size="40%"
+             :size="systemStore.windowWidth<=768?'100%':'40%'"
   >
 
     <el-form inline>

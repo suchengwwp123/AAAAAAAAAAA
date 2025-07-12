@@ -16,9 +16,9 @@
 /*表格通用样式*/
 .page {
 
-    .el-select{
-        min-width: 200px!important;
-    }
+    /*.el-select{*/
+    /*    min-width: 200px!important;*/
+    /*}*/
     /**
     查询表单外边距统一样式
      */

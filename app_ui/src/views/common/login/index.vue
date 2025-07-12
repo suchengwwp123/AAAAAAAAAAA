@@ -6,13 +6,13 @@ import useSystemStore from '@/stores/system'
 import router from '@/router'
 
 
-
 import {rsaEncrypt} from '@/utils/rsa'
 import LoginCover from "../../../components/SystembackgroundCover.vue";
 import SystembackgroundCover from "../../../components/SystembackgroundCover.vue";
 import SystemBackGroundInfo from "@/components/SystemBackGroundInfo.vue";
-const copyright=import.meta.env.VITE_COPYRIGHT_NAME
-const $route = router
+
+const copyright = import.meta.env.VITE_COPYRIGHT_NAME
+const $router = router
 const systemStore = useSystemStore()
 const formSize = ref('default')
 const ruleFormRef = ref()
@@ -29,15 +29,28 @@ const ruleForm = reactive({
 const rules = reactive({
   username: [
     {required: true, message: '请输入账户名', trigger: 'blur'},
-    {min: 5, max: 10, message: '账户名在5到10位', trigger: 'blur'}
+    {
+      pattern: /^(?!\d+$)[A-Za-z\d]{5,10}$/,
+      message: '账户名必须是5到10位字母或字母数字组合',
+      trigger: 'blur'
+    }
   ],
   password: [
     {required: true, message: '请输入密码', trigger: 'blur'},
-    {min: 5, max: 10, message: '密码在5到10位', trigger: 'blur'}
+    {min: 5, max: 10, message: '密码在5到10位', trigger: 'blur'},
+    {
+      pattern: /^[A-Za-z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{5,10}$/,
+      message: '密码格式不正确',
+      trigger: 'blur'
+    }
   ],
   code: [
     {required: true, message: '请输入验证码', trigger: 'blur'},
-    {min: 5, max: 5, message: '验证码为长度为5', trigger: 'blur'}
+    {
+      pattern: /^\d{5}$/,
+      message: '验证码必须是5位数字',
+      trigger: 'blur'
+    }
   ]
 })
 //登录方法
@@ -65,7 +78,7 @@ const submitForm = async (formEl) => {
           type: 'success'
         })
 
-        $route.replace('/')
+        $router.replace('/')
       } catch (error) {
         getCaptcha()
       }
@@ -98,8 +111,8 @@ const initRsa = async () => {
 // 判断是否登录
 const checkLogin = async () => {
   try {
-    const res=   await request.get(`/auth/islogin`)
-    if (res.data){
+    const res = await request.get(`/auth/islogin`)
+    if (res.data) {
       ElMessageBox.confirm(
           '系统检测到当前您已经登录了，确认重新登录？',
           '重要提示',
@@ -111,16 +124,17 @@ const checkLogin = async () => {
       )
           .then(async () => {
             await request.post(`/auth/logout`)
-
+            await initRsa()
+            await getCaptcha()
           })
           .catch(async () => {
             // ElMessage({
             //   type: 'info',
             //   message: '取消成功',
             // })
-            $route.replace(`/`)
+            $router.replace(`/`)
           })
-    }else {
+    } else {
       await initRsa()
       await getCaptcha()
     }
@@ -131,7 +145,7 @@ const checkLogin = async () => {
   }
 }
 
-onBeforeMount(()=>{
+onBeforeMount(() => {
   checkLogin()
 
 })
@@ -146,7 +160,7 @@ onBeforeMount(()=>{
   >
     <el-col :xs="0" :sm="0" :md="12" :lg="16" :xl="16"
     >
-   <SystemBackGroundInfo></SystemBackGroundInfo>
+      <SystemBackGroundInfo></SystemBackGroundInfo>
     </el-col>
     <el-col :xs="24" :sm="18" :md="12" :lg="8" :xl="8"
     >
@@ -161,7 +175,7 @@ onBeforeMount(()=>{
 
           <el-text type="warning"
                    class="login-form-container__header-link"
-                   @click="$route.push(`/register`)">
+                   @click="$router.push(`/register`)">
             立即注册
           </el-text>
         </div>
@@ -171,17 +185,16 @@ onBeforeMount(()=>{
             ref="ruleFormRef"
             :model="ruleForm"
             :rules="rules"
-            label-width="70px"
             :size="formSize"
             status-icon
         >
-          <el-form-item label="账户名" prop="username">
+          <el-form-item  prop="username">
             <el-input v-model="ruleForm.username"
 
                       placeholder="请输入账户名"
                       prefix-icon="User"/>
           </el-form-item>
-          <el-form-item label="密&nbsp;&nbsp;&nbsp;&nbsp;码" prop="password">
+          <el-form-item prop="password">
             <el-input
                 v-model="ruleForm.password"
                 prefix-icon="Lock"
@@ -190,7 +203,7 @@ onBeforeMount(()=>{
                 show-password
             />
           </el-form-item>
-          <el-form-item label="验证码" prop="code">
+          <el-form-item  prop="code">
             <div class="login-form-container__content-captcha">
               <el-input
                   v-model="ruleForm.code"
@@ -218,11 +231,11 @@ onBeforeMount(()=>{
             立即登录
           </el-button>
           <div class="login-form-container__content-forgetbutton--text">
-            <el-button type="success" text @click="$route.push(`/forget`)">忘记密码？</el-button>
+            <el-button type="success" text @click="$router.push(`/forget`)">忘记密码？</el-button>
           </div>
         </el-form>
         <footer class="login-form-container__footer">
-          <el-text>{{ copyright}}</el-text>
+          <el-text>{{ copyright }}</el-text>
         </footer>
 
       </div>
@@ -238,11 +251,11 @@ onBeforeMount(()=>{
 
 
   .login-form-container {
-    padding: 0px 80px;
+    padding: 0px 30px;
     display: flex;
     flex-direction: column;
     justify-content: end;
-    height: 100vh;
+    height: 100dvh;
 
     .login-form-container__header {
       height: 20vh;
