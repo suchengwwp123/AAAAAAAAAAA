@@ -70,7 +70,7 @@ const props = withDefaults(defineProps(), {
   radialGradient: true,
 });
 const handleDoc=()=>{
-window.open(`${import.meta.env.VITE_USE_URL}`)
+window.open(`https://www.yuque.com/kouding-nkkg8/rimn7l/go99e6iel59lwbpc?singleDoc# 《authority代码生成器使用教程》 密码：xybd`)
 }
 const login_name=import.meta.env.VITE_LOGIN_NAME
 </script>

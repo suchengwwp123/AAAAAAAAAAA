@@ -59,7 +59,6 @@ const submitForm = async (formEl) => {
   formEl.validate(async (valid, fields) => {
     if (valid) {
       try {
-
         const encrypted = rsaEncrypt.encrypt(ruleForm.password)
         const submitData = {
           username: '',
@@ -70,17 +69,16 @@ const submitForm = async (formEl) => {
         Object.assign(submitData, ruleForm)
         submitData.password = encrypted
         const res = await request.post('/auth/login', submitData)
-
         systemStore.setToken(res.data.tokenValue)
         ElNotification({
           title: '登录成功',
           message: `${ruleForm.username} 欢迎您!`,
           type: 'success'
         })
-
         $router.replace('/')
       } catch (error) {
-        getCaptcha()
+        await initRsa()
+        await getCaptcha()
       }
     }
   })
@@ -218,9 +216,9 @@ onBeforeMount(() => {
               >
                 <template #error>
                   <div class="image-slot">
-                    <el-icon>
-                      <MagicStick/>
-                    </el-icon>
+
+                      <el-icon><Loading /></el-icon>
+
                   </div>
                 </template>
               </el-image>

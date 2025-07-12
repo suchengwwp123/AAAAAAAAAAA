@@ -17,6 +17,8 @@ const emit = defineEmits(['changeDialog'])
 const form = reactive({
   id: undefined,
   statu: 1,
+  username: undefined,
+  nickname: undefined,
   avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
   roleIds: [],
   password: '12345',
@@ -127,14 +129,15 @@ const handleResetForm = (formEl) => {
     roleIds: [],
     password: '12345',
     phone: undefined,
-    email: undefined
+    email: undefined,
+    uusername: undefined,
+    nickname: undefined
   })
   emit('changeDialog', false)
 }
 // 初始化数据
 const handleGetForm = async (id) => {
   const res = await request.get(`/user/${id}`)
-
   Object.assign(form, res.data)
   await handleGetTrees()
   await handleSetCheckKeys()
@@ -232,7 +235,6 @@ export default {
         :before-close="handleClose"
 
     >
-
       <el-form
           ref="ruleFormRef"
           :model="form"
@@ -265,7 +267,6 @@ export default {
         <el-form-item label="手机号码" prop="phone">
           <el-input v-model="form.phone"/>
         </el-form-item>
-
 
         <el-form-item label="个人邮箱" prop="email">
           <el-input v-model="form.email"/>
