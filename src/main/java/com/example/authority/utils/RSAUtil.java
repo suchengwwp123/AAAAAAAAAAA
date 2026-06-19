@@ -1,7 +1,5 @@
 package com.example.authority.utils;
 
-import cn.hutool.core.io.resource.ClassPathResource;
-
 import javax.crypto.Cipher;
 import java.io.File;
 import java.nio.file.Files;
@@ -26,14 +24,14 @@ public class RSAUtil {
      */
     public static KeyPair generateKeyPair() throws Exception {
         // 读取公钥
-        String publicKeyStr = Files.readString(
-                new ClassPathResource("rsa/public.key").getFile().toPath()
+        String publicKeyStr = new String(
+                new org.springframework.core.io.ClassPathResource("rsa/public.key").getInputStream().readAllBytes()
         );
         PublicKey publicKey = getPublicKey(publicKeyStr);
 
         // 读取私钥
-        String privateKeyStr = Files.readString(
-                new ClassPathResource("rsa/private.key").getFile().toPath()
+        String privateKeyStr = new String(
+                new org.springframework.core.io.ClassPathResource("rsa/private.key").getInputStream().readAllBytes()
         );
         PrivateKey privateKey = getPrivateKey(privateKeyStr);
 

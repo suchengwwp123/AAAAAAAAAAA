@@ -28,15 +28,15 @@ public class RsaKeyProperties {
     public void init() {
         try {
             // 读取公钥
-            String publicKeyContent = Files.readString(
-                    new ClassPathResource("rsa/public.key").getFile().toPath()
+            String publicKeyContent = new String(
+                    new ClassPathResource("rsa/public.key").getInputStream().readAllBytes()
             );
             publicKey = RSAUtil.getPublicKey(publicKeyContent);
             publicKeyStr = publicKeyContent; // 直接用 Base64 字符串
 
             // 读取私钥
-            String privateKeyContent = Files.readString(
-                    new ClassPathResource("rsa/private.key").getFile().toPath()
+            String privateKeyContent = new String(
+                    new ClassPathResource("rsa/private.key").getInputStream().readAllBytes()
             );
             privateKey = RSAUtil.getPrivateKey(privateKeyContent);
 
