@@ -51,9 +51,9 @@ spring:
         deny:
   data:
     redis:
-      host: ${REDIS_HOST:redis.railway.internal}
-      port: ${REDIS_PORT:6379}
-      password: ${REDIS_PASSWORD:}
+      host: ${REDIS_HOST:thomas.proxy.rlwy.net}
+      port: ${REDIS_PORT:28688}
+      password: ${REDIS_PASSWORD:REDIS_PASSWORD_REPLACED}
       timeout: 10s
       lettuce:
         pool:
