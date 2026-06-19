@@ -6,7 +6,7 @@ server:
 
 spring:
   application:
-    name: authority-2026.0.3
+    name: design
   ai:
     ollama:
       base: http://localhost:11434
@@ -22,9 +22,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost:3306/authority-2026.0.3?allowPublicKeyRetrieval=true&useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
-    username: root
-    password: root
+    url: jdbc:mysql://localhost:3306/authority?allowPublicKeyRetrieval=true&useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: authority
+    password: kwAiHxs3nfBskLMb
     # 以下是druid配置
     # Druid的其他属性配置
     druid:
@@ -157,7 +157,7 @@ files:
   upload:
     path: D:\files\
     #访问前缀
-    urlprefix: http://localhost:9090/files/
+    urlprefix: http://8.130.42.174:9090/files/
     #压缩比例
     outputquality: 1
 

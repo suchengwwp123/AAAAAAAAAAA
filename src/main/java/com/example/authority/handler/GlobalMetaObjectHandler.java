@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 /**
- * @program: authority-2026.0.33
+ * @program: design3
  * @ClassName:GlobalMetaObjectHandler
  * @description: 全局自动填充处理器
  * @author:dyy

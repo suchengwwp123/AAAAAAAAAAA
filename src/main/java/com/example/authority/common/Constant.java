@@ -2,7 +2,7 @@ package com.example.authority.common;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName: Constant
  * @description: 常量静态类
  * @author:dyy

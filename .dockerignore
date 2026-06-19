@@ -1,0 +1,6 @@
+target/
+.idea/
+*.iml
+app_ui/
+node_modules/
+.git/

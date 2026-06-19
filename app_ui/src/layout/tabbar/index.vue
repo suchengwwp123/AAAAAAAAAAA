@@ -52,9 +52,8 @@ const handleLogOut = async () => {
   )
       .then(async () => {
         await request.post('/auth/logout')
-        systemStore.reset()
         await $router.replace('/login')
-
+        systemStore.reset()
         ElMessage({
           showClose: true,
           message: '退出登录成功！',
@@ -160,14 +159,7 @@ export default {
       <div
           class="layout-tabbar__settings"
       >
-        <el-tooltip
-            class="box-item"
-            effect="dark"
-            content="AI助手"
-            placement="top-start"
-        >
-          <el-button type="info" @click="handleAiDrawer" :icon="ChatDotRound" circle/>
-        </el-tooltip>
+
         <el-tooltip
             class="box-item"
             effect="dark"

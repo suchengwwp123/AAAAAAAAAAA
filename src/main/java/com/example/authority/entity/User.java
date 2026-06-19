@@ -15,7 +15,7 @@ import java.util.List;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:User
  * @description: 用户表 实体类
  * @author:dyy
@@ -46,8 +46,8 @@ public class User implements Serializable {
     private String password;
 
 
-    @Schema(title = "昵称")
-    @ExcelProperty("昵称")
+    @Schema(title = "姓名")
+    @ExcelProperty("姓名")
     @TableField("nickname")
     private String nickname;
 

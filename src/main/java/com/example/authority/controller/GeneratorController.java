@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:GeneratorController
  * @description: 代码生成器前端控制器
  * @author:dyy

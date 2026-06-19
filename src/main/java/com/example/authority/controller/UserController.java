@@ -8,17 +8,16 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.authority.common.Constant;
 import com.example.authority.common.Result;
-import com.example.authority.entity.User;
-import com.example.authority.entity.UserRole;
+import com.example.authority.entity.*;
 import com.example.authority.annotations.ClearPerms;
 import com.example.authority.entity.dto.OnlineUserDTO;
 import com.example.authority.enums.Subscription;
 import com.example.authority.handler.WebSocketHandler;
-import com.example.authority.service.UserRoleService;
-import com.example.authority.service.UserService;
+import com.example.authority.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -42,7 +41,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:UserController
  * @description: UserController前端控制器
  * @author:dyy
@@ -62,6 +61,18 @@ public class UserController {
     private UserRoleService userRoleService;
     @Autowired
     private HttpSession httpSession;
+    @Resource
+    private CollectService collectService;
+    @Resource
+    private VitaeService  vitaeService;
+    @Resource
+    private OrderService orderService;
+    @Resource
+    private TicketsService  ticketsService;
+    @Resource
+    private ComplainService complainService;
+
+
 
     /**
      * 新增
@@ -161,7 +172,16 @@ public class UserController {
 
     @GetMapping
     public Result indAll() {
-        return Result.success(userService.list());
+        LambdaQueryWrapper<UserRole> userRoleLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        List<UserRole> userRoles = userRoleService.list(userRoleLambdaQueryWrapper.eq(UserRole::getRoleId, 1L));
+        if (userRoles.size()==0){
+            return Result.success(new Page<User>());
+        }
+
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<User>().orderByDesc(User::getId);
+        lambdaQueryWrapper.in(User::getId,userRoles.stream().map(UserRole::getUserId).collect(Collectors.toList()));
+
+        return Result.success(userService.list(lambdaQueryWrapper));
     }
 
     /**
@@ -196,10 +216,33 @@ public class UserController {
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "10") Integer pageSize) {
 
-        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<User>().like(User::getUsername, name).like(User::getPhone, phone).like(User::getEmail, email).orderByDesc(User::getId);
-        if (statu != null) {
-            lambdaQueryWrapper.eq(User::getStatu, statu);
+        LambdaQueryWrapper<UserRole> userRoleLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        List<UserRole> userRoles = userRoleService.list(userRoleLambdaQueryWrapper.in(UserRole::getRoleId, 1L,6L));
+        if (userRoles.size()==0){
+            return Result.success(new Page<User>());
         }
+
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<User>().like(User::getNickname, name).orderByDesc(User::getId);
+        lambdaQueryWrapper.in(User::getId,userRoles.stream().map(UserRole::getUserId).collect(Collectors.toList()));
+
+        return Result.success(userService.page(new Page<>(pageNum, pageSize), lambdaQueryWrapper));
+    }
+
+    @Operation(summary = "分页显示")
+    @GetMapping("/pages")
+    public Result findSidPage(
+            @RequestParam(defaultValue = "") String name,
+
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "10") Integer pageSize) {
+        LambdaQueryWrapper<UserRole> userRoleLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        List<UserRole> userRoles = userRoleService.list(userRoleLambdaQueryWrapper.eq(UserRole::getRoleId, 7L));
+        if (userRoles.size()==0){
+            return Result.success(new Page<User>());
+        }
+
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<User>().like(User::getNickname, name).orderByDesc(User::getId);
+        lambdaQueryWrapper.in(User::getId,userRoles.stream().map(UserRole::getUserId).collect(Collectors.toList()));
 
         return Result.success(userService.page(new Page<>(pageNum, pageSize), lambdaQueryWrapper));
     }
@@ -315,6 +358,12 @@ public class UserController {
      */
     private void removeUserAndLogout(Object id) {
         userRoleService.remove(new LambdaQueryWrapper<UserRole>().eq(UserRole::getUserId, id));
+        collectService.remove(new LambdaUpdateWrapper<Collect>().in(Collect::getUserId, Arrays.asList(id)));
+        orderService.remove(new LambdaUpdateWrapper<Order>().in(Order::getUserId, Arrays.asList(id)));
+        orderService.remove(new LambdaUpdateWrapper<Order>().in(Order::getWorkerId, Arrays.asList(id)));
+        vitaeService.remove(new LambdaUpdateWrapper<Vitae>().in(Vitae::getUserId, Arrays.asList(id)));
+        complainService.remove(new LambdaUpdateWrapper<Complain>().in(Complain::getUserId, Arrays.asList(id)));
+        ticketsService.remove(new LambdaUpdateWrapper<Tickets>().in(Tickets::getUserId, Arrays.asList(id)));
         StpUtil.logout(id, "PC");
     }
 

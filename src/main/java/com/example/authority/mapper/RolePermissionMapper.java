@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
  * </p>
  *
  * @author baomidou
- * @since 2023-09-27
+ * @since 2025-09-27
  */
 @Mapper
 public interface RolePermissionMapper extends BaseMapper<RolePermission> {

@@ -1,4 +1,4 @@
-<script setup>
+<script setup >
   import {reactive, ref} from 'vue'
   import {
     CircleCloseFilled,
@@ -13,12 +13,12 @@
   } from '@element-plus/icons-vue'
   import request from '@/utils/request'
   import {ElMessage, ElMessageBox} from 'element-plus'
-  import router from '@/router'
+
   import downloadExcel from '@/utils/downloads'
-  import {MdEditor} from 'md-editor-v3';
+
   import 'md-editor-v3/lib/style.css';
   import {useRoute} from "vue-router";
-
+  import router from '@/router'
   const $router = router
   const $route = useRoute()
   // 弹框头部名称
@@ -41,14 +41,14 @@
       #foreach($item in $tableColumns)
           #if($item.entityClass)
           //   ${item.objectName}List
-          const ${item.objectName}List = ref([])
+          const  ${item.objectName}List=ref([])
           #end
       #end
   //定义查询值
       #foreach($item in $tableColumns)
           #if($item.isSearch)
           //   ${item.name}List
-          const ${item.name}= ref('')
+          const  ${item.name}=ref('')
           #end
       #end
   // 表单数据定义
@@ -84,7 +84,7 @@
           }
           //上传成功
           const $handleSucess= (res) => {
-                  $fullImgName .value[$fullImgName .value.length - 1].url = res.data
+                  $fullImgName .value[ $fullImgName .value.length- 1].url = res.data
           }
           #else
 
@@ -94,6 +94,8 @@
   const formSize = ref('default')
   // 表单ref标识数据
   const ruleFormRef = ref()
+  // 自定义校验规则
+
   // 表单校验规则
   const rules = reactive({
 
@@ -131,23 +133,24 @@
           #end
       #end
   })
+
   //新增方法
   const handleAdd = async () => {
-    headerTitle.value = '新增数据'
+    headerTitle.value = reactive('新增数据')
     dialogVisible.value = true
   }
   // 修改方法
   const handleUpdate = async (id) => {
     dialogVisible.value = true
-    headerTitle.value = '编辑数据'
+    headerTitle.value = reactive('编辑数据')
     const res = await request.get(`/$tableName/#[[${id}]]#`)
     Object.assign(form, res.data)
     #foreach($item in $tableColumns)
-    #if($item.formComponent == 'mutileimg')
+    #if($item.formComponent=='mutileimg')
     //响应式数组
     #set($imgName = "imgList")
     #set($fullImgName = $imgName + $item.name)
-    $fullImgName.value = JSON.parse(form.$item.name)
+    $fullImgName  .value=JSON.parse(form. $item.name)
     #else
 
     #end
@@ -177,6 +180,7 @@
     })
     await load()
   }
+
   // 分页查询方法（初始化方法，页面加载成功以后就调用的方法）
   const load = async () => {
     const res = await request.get('/$tableName/page', {
@@ -186,10 +190,7 @@
         pageSize: pageSize.value,
         #foreach($item in $tableColumns)
     #if($item.isSearch)
-    $item.name
-  :${item.name}
-  .
-    value,
+    $item.name:${item.name}.value,
         #end
     #end
   }
@@ -202,42 +203,23 @@
     #if($item.entityClass)
     //   ${item.objectName}List
     #if($item.dictId)
-    const res$
-    {
-      item.objectName
-    }
-    = await request.get(`/dict/detail/$item.dictId`)
-    ${item.objectName}
-    List.value = res$
-    {
-      item.objectName
-    }
-  .
-    data
+    const res${item.objectName} = await request.get(`/dict/detail/$item.dictId`)
+    ${item.objectName}List.value =res${item.objectName}.data
     #else
-    const res$
-    {
-      item.objectName
-    }
-    = await request.get(`/${item.objectName}`)
-    ${item.objectName}
-    List.value = res$
-    {
-      item.objectName
-    }
-  .
-    data
+    const res${item.objectName} = await request.get(`/${item.objectName}`)
+    ${item.objectName}List.value =res${item.objectName}.data
     #end
     #end
     #end
   }
   // 加载页面初始化调用load方法
   load()
+
   // 清空查询数据重置方法
   const handleReset = () => {
     #foreach($item in $tableColumns)
     #if($item.isSearch)
-        ${item.name}.value = ''
+        ${item.name}.value=''
     #end
     #end
     load()
@@ -257,6 +239,7 @@
     multipleSelection.value = val
     disabled.value = val.length === 0
   }
+
   // 关闭弹框提示方法
   const handleClose = (done) => {
     ElMessageBox.confirm('确定关闭窗口?')
@@ -270,25 +253,28 @@
           // catch error
         })
   }
+
+
   // 提交表单校验方法
   const handleSubmitForm = async (formEl) => {
     if (!formEl) return
 
     #foreach($item in $tableColumns)
     #if($item.formComponent == 'mutileimg')
-    #set($imgName = "imgList")
-    #set($form = "form.")
-    #set($formel = $form + $item.name)
+    #set($imgName= "imgList")
+    #set($form= "form.")
+    #set($formel=$form+ $item.name)
     #set($fullImgName = $imgName + $item.name)
-    if ($fullImgName.value.length > 0) {
-      $formel = JSON.stringify($fullImgName.value)
-    } else {
-      $formel = ''
+    if( $fullImgName .value.length>0){
+      $formel=JSON.stringify( $fullImgName .value)
+    }else {
+      $formel=''
     }
 
     #else
     #end
     #end
+
 
 
     await formEl.validate(async (valid, fields) => {
@@ -347,7 +333,7 @@
               #set($form= "form.")
               #set($formel=$form+ $item.name)
               #set($fullImgName1 = $imgName + $item.name+".value")
-                  $fullImgName1 = []
+                  $fullImgName1  = []
           #end
       #end
 
@@ -366,6 +352,7 @@
     dialogVisible.value = false
     await load()
   }
+
   // 文件上传方法
       #foreach($item in $tableColumns)
           #if($item.formComponent=="img"||$item.formComponent=="file")
@@ -387,6 +374,7 @@
           }
           #end
       #end
+
   // 文件下载
   const dowload = async (url) => {
     window.open(url)
@@ -487,7 +475,7 @@
                 #elseif($item.formComponent=="input")
                     #if($item.entityClass)
                       <el-form-item label="$item.description" prop="$item.name">
-                        <el-select v-model="form.$item.name">
+                        <el-select v-model="form.$item.name" >
                           <el-option
                               v-for="(item,index) in ${item.objectName}List"
                               :label="item.${item.columnName}"
@@ -553,7 +541,7 @@
     <template #footer>
       <div class="el-drawer__footer-container--line">
         <el-button @click="handleResetForm(ruleFormRef)">取消</el-button>
-        <el-button type="primary" @click="handleSubmitForm(ruleFormRef)"> 提交</el-button>
+        <el-button type="primary" @click="handleSubmitForm(ruleFormRef)"> 提交 </el-button>
       </div>
     </template>
   </el-drawer>
@@ -570,7 +558,7 @@
 
                       #if($item.entityClass)
                         <el-form-item label-width="5px">
-                          <el-select v-model="$item.name" placeholder="请选择${item.description}" @change="load">
+                          <el-select v-model="$item.name"  placeholder="请选择${item.description}" @change="load">
                             <el-option
                                 v-for="(item,index) in ${item.objectName}List"
                                 :label="item.${item.columnName}"
@@ -632,7 +620,7 @@
           </template>
         </el-popconfirm>
       </div>
-      <!--   批量导出   -->
+
       <div v-permission="'sys:$tableName:batch:export'">
         <el-button
             type="warning"
@@ -658,7 +646,7 @@
         <el-table-column type="selection" width="55"/>
           #foreach($item in $tableColumns)
               #if($item.name=="id")
-                <el-table-column type="index" label="序号" align="center" width="70"/>
+                <el-table-column type="index"  label="序号" align="center"  width="70"  />
               #elseif($item.formComponent=="img")
                 <el-table-column prop="$item.name" label="$item.description" align="center">
                   <template #default="scope">
@@ -678,8 +666,7 @@
               #elseif($item.formComponent=="file")
                 <el-table-column prop="$item.name" label="$item.description" align="center">
                   <template #default="scope">
-                    <el-button class="ml-2" type="success" size="small" @click="dowload(scope.row.$item.name)">下载
-                    </el-button>
+                    <el-button class="ml-2" type="success" size="small" @click="dowload(scope.row.$item.name)">下载</el-button>
                   </template>
                 </el-table-column>
               #elseif($item.formComponent=="textarea")
@@ -758,6 +745,7 @@
             :current-page="pageNum"
             :page-size="pageSize"
             :page-sizes="[10, 20, 30, 50, 100, 500, 1000]"
+
             layout="total, sizes, prev, pager, next, jumper"
             :total="Number(total)"
             @size-change="handleSizeChange"

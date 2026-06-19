@@ -16,7 +16,7 @@ import java.io.Serializable;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:UserServiceImpl
  * @description: 用户表 service实现类
  * @author:dyy
@@ -36,12 +36,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public User getUserInfo() {
-        if (ObjectUtil.isNotEmpty(redisUtils.hget(Constant.ONLINE_PREFIX, String.valueOf(StpUtil.getLoginId())))){
+        if (ObjectUtil.isNotEmpty(redisUtils.hget(Constant.ONLINE_PREFIX, String.valueOf(StpUtil.getLoginId())))) {
 //            log.info("从redis中获取onlineUser缓存信息");
             return (User) redisUtils.hget(Constant.ONLINE_PREFIX, String.valueOf(StpUtil.getLoginId()));
-        }else{
-            User onlineUser=this.getById((Serializable) StpUtil.getLoginId());
-            redisUtils.hset(Constant.ONLINE_PREFIX, String.valueOf(StpUtil.getLoginId()),onlineUser);
+        } else {
+            User onlineUser = this.getById((Serializable) StpUtil.getLoginId());
+            redisUtils.hset(Constant.ONLINE_PREFIX, String.valueOf(StpUtil.getLoginId()), onlineUser);
             return onlineUser;
         }
 

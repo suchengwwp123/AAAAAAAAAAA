@@ -19,6 +19,7 @@ const props = {
 }
 onBeforeMount((async () => {
   if ($route.query.id) {
+
     await load($route.query.id)
   }
   await handleGetTables()
@@ -33,10 +34,8 @@ const load = async (id) => {
 const handleGetTables = async () => {
   const res = await request.get(`/generator/tables`)
   const tableOptions = res.data
-
   const red = await request.get(`/dict/options`)
   const dictOptions = red.data
-
 
   const sumarryOptions = [
     {
@@ -165,13 +164,15 @@ const submitForm = (formEl) => {
           }
       )
           .then(async () => {
+            const query = { ...$route.query }
+            delete query.id
+            $router.push(`/tools/generator`)
             await request.post('/generator', dynamicValidateForm)
             ElMessage({
               showClose: true,
               message: '构建成功，请立即重启项目！',
               type: 'success'
             })
-
           })
           .catch(() => {
             ElMessage({

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName: LogService
  * @description: 操作日志 service
  * @author:dyy

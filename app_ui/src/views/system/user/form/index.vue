@@ -248,7 +248,7 @@ export default {
           <el-input v-model="form.username" :disabled="form.id"/>
           <el-alert title="默认密码为12345" type="success" :closable="false"/>
         </el-form-item>
-        <el-form-item label="用户昵称" prop="nickname">
+        <el-form-item label="用户姓名" prop="nickname">
           <el-input v-model="form.nickname"/>
         </el-form-item>
 

@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:RegisterDto
  * @description: 注册使用的实体Dto
  * @author:dyy
@@ -35,7 +35,7 @@ public class RegisterDto implements Serializable {
     private String password;
     @Schema(title = "确认密码")
     private String checkPass;
-    @Schema(title = "昵称")
+    @Schema(title = "姓名")
     private String nickname;
     @Schema(title = "头像")
     private String avatar;

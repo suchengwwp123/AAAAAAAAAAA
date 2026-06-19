@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:${table.serviceImplName}
  * @description: $!{table.comment} service实现类
  * @author:dyy

@@ -15,7 +15,7 @@ import java.util.List;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:Role
  * @description: 角色表 实体类
  * @author:dyy

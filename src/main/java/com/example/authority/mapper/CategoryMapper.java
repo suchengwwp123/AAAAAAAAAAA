@@ -1,0 +1,18 @@
+package com.example.authority.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.example.authority.entity.Category;
+import org.apache.ibatis.annotations.Mapper;
+
+/**
+ * <p>
+ * 文章分类 Mapper 接口
+ * </p>
+ *
+ * @author baomidou
+ * @since 2025-10-22
+ */
+@Mapper
+public interface CategoryMapper extends BaseMapper<Category> {
+
+}

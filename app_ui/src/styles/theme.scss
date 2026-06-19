@@ -1,0 +1,26 @@
+/* 医院陪诊偏紫主题 */
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: (
+    'primary': (
+      'base': #6a5acd, // 紫蓝色，主视觉色，信任感+柔和感
+    ),
+    'success': (
+      'base': #52c41a, // 清新绿，正常/成功状态
+    ),
+    'warning': (
+      'base': #faad14, // 金黄，提示/注意
+    ),
+    'danger': (
+      'base': #f5222d, // 红色，错误/警示
+    ),
+    'error': (
+      'base': #f5222d, // 统一错误颜色
+    ),
+    'info': (
+      'base': #9370db, // 淡紫色，辅助信息
+    ),
+  ),
+);
+
+/* 引入 Element Plus 样式 */
+@use "element-plus/theme-chalk/src/index.scss" as *;

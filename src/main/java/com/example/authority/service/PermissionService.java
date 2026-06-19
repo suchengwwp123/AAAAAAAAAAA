@@ -7,7 +7,7 @@ import java.util.List;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName: PermissionService
  * @description: 菜单表 service
  * @author:dyy

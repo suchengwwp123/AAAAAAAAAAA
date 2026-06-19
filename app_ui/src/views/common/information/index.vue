@@ -15,7 +15,7 @@ const activeName = ref('first')
     <el-col :span="24">
       <el-descriptions :column="2" title="个人信息" size="default" border>
         <el-descriptions-item label="账户名">{{ userInfo.username }}</el-descriptions-item>
-        <el-descriptions-item label="昵称">{{ userInfo.nickname }}</el-descriptions-item>
+        <el-descriptions-item label="姓名">{{ userInfo.nickname }}</el-descriptions-item>
         <el-descriptions-item label="当前状态">
           <el-tag type="success" v-if="userInfo.statu == 1">正常</el-tag>
           <el-tag type="danger" v-if="userInfo.statu == 2">封禁</el-tag>

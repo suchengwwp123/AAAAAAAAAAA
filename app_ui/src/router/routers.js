@@ -27,6 +27,57 @@ const constrouters = [
         path: '/front/index',
         name: 'frontindex',
         component: () => import('@/views/front/index/index.vue'),
+      },
+      {
+        path: '/front/contact',
+        name: 'frontcontact',
+        component: () => import('@/views/front/contact/index.vue'),
+      }
+      ,
+      {
+        path: '/front/info',
+        name: 'frontinformation',
+        component: () => import('@/views/front/information/index.vue'),
+      }
+      ,
+      {
+        path: '/front/detail',
+        name: 'frontdetail',
+        component: () => import('@/views/front/index/detail.vue'),
+      }
+      ,
+      {
+        path: '/front/collect',
+        name: 'frontcollect',
+        component: () => import('@/views/front/collect/index.vue'),
+      }     ,
+      {
+        path: '/front/vitae',
+        name: 'frontvitae',
+        component: () => import('@/views/front/vitae/index.vue'),
+      },
+      {
+        path: '/front/vitae/detail',
+        name: 'frontvitaedetail',
+        component: () => import('@/views/front/vitae/detail.vue'),
+      }
+      ,
+      {
+        path: '/front/order',
+        name: 'frontorder',
+        component: () => import('@/views/front/order/index.vue'),
+      }
+      ,
+      {
+        path: '/front/complain',
+        name: 'frontordercomplain',
+        component: () => import('@/views/front/complain/index.vue'),
+      }
+      ,
+      {
+        path: '/front/tickets',
+        name: 'fronttickets',
+        component: () => import('@/views/front/tickets/index.vue'),
       }
     ]
   },

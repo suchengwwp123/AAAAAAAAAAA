@@ -220,7 +220,7 @@ const handlechangeDialog = (value) => {
           </template>
         </el-table-column>
         <el-table-column prop="username" label="账户名" align="center" show-overflow-tooltip/>
-        <el-table-column prop="nickname" label="昵称" align="center"  show-overflow-tooltip/>
+        <el-table-column prop="nickname" label="姓名" align="center"  show-overflow-tooltip/>
         <el-table-column prop="phone" label="电话号码" align="center" show-overflow-tooltip />
         <el-table-column prop="email" label="邮箱号" align="center"  show-overflow-tooltip/>
         <el-table-column prop="statu" label="当前状态" align="center">

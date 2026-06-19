@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName: IgnoreParam
  * @description: 忽略参数注解，搭配LogAspect使用
  * @author:dyy

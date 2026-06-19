@@ -28,7 +28,7 @@ import java.util.Arrays;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName: LogAspect
  * @description: 日志注解拦截器
  * @author:dyy

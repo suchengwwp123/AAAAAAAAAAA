@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName: Constant
  * @description: 统一封装返回体
  * @author:dyy

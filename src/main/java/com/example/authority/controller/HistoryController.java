@@ -31,7 +31,7 @@ import com.example.authority.entity.History;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:HistoryController
  * @description: HistoryController前端控制器
  * @author:dyy

@@ -1,0 +1,176 @@
+server:
+  port: 9090
+  servlet:
+    context-path: /api
+    max-http-header-size: 10MB
+
+spring:
+  application:
+    name: design
+  ai:
+    ollama:
+      base: http://localhost:11434
+      chat:
+        model: deepseek-r1:8b
+    deepseek:
+      api-key: sk-4acb0db05bf44196920f1b98c0f90c74
+      base-url: https://api.deepseek.com/v1
+      model: deepseek-chat
+      chat:
+        options:
+          max-tokens: 3000
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3307  /hosp?allowPublicKeyRetrieval=true&useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    # 以下是druid配置
+    # Druid的其他属性配置
+    druid:
+      # 初始化时建立物理连接的个数
+      initial-size: 5
+      # 连接池的最小空闲数量
+      min-idle: 5
+      # 连接池最大连接数量
+      max-active: 20
+      # 获取连接时最大等待时间，单位毫秒
+      max-wait: 60000
+      # 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+      test-while-idle: true
+      # 既作为检测的间隔时间又作为testWhileIdel执行的依据
+      time-between-eviction-runs-millis: 60000
+      # 销毁线程时检测当前连接的最后活动时间和当前时间差大于该值时，关闭当前连接(配置连接在池中的最小生存时间)
+      min-evictable-idle-time-millis: 30000
+      # 用来检测数据库连接是否有效的sql 必须是一个查询语句(oracle中为 select 1 from dual)
+      validation-query: select 'x'
+      # 申请连接时会执行validationQuery检测连接是否有效,开启会降低性能,默认为true
+      test-on-borrow: false
+      # 归还连接时会执行validationQuery检测连接是否有效,开启会降低性能,默认为true
+      test-on-return: false
+      # 是否缓存preparedStatement, 也就是PSCache,PSCache对支持游标的数据库性能提升巨大，比如说oracle,在mysql下建议关闭。
+      pool-prepared-statements: false
+      # 置监控统计拦截的filters，去掉后监控界面sql无法统计，stat: 监控统计、Slf4j:日志记录、waLL: 防御sqL注入
+      filters: stat,wall,slf4j
+      # 要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100
+      max-pool-prepared-statement-per-connection-size: -1
+      # 合并多个DruidDataSource的监控数据
+      use-global-data-source-stat: true
+
+      web-stat-filter:
+        # 是否启用StatFilter默认值true
+        enabled: true
+        # 添加过滤规则
+        url-pattern: /*
+        # 忽略过滤的格式
+        exclusions: /druid/*,*.js,*.gif,*.jpg,*.png,*.css,*.ico
+
+      stat-view-servlet:
+        # 是否启用StatViewServlet默认值true
+        enabled: true
+        # 访问路径为/druid时，跳转到StatViewServlet
+        url-pattern: /druid/*
+        # 是否能够重置数据
+        reset-enable: false
+        # 需要账号密码才能访问控制台，默认为root
+        login-username: druid
+        login-password: druid
+        # IP白名单
+        allow: 127.0.0.1
+        # IP黑名单（共同存在时，deny优先于allow）
+        deny:
+
+  mail:
+    #配置smtp服务主机地址
+    host: smtp.qq.com
+    #发送者邮箱
+    username: 1874121406@qq.com
+    #申请到的授权码
+    password: vubvftwbyjndfddh
+    #端口号465或587（QQ邮箱）
+    port: 465
+    #默认的邮件编码为UTF-8
+    default-encoding: UTF-8
+    #其他参数
+    properties:
+      mail:
+        #配置SSL 加密工厂
+        smtp:
+          ssl:
+            #本地测试，先放开ssl
+            enable: true
+            required: false
+  data:
+    # redis配置
+    redis:
+      # Redis数据库索引（默认为0）
+      database: 1
+      # Redis服务器地址
+      host: 127.0.0.1
+      # Redis服务器连接端口
+      port: 6379
+      # Redis服务器连接密码（默认为空）
+      password:
+      # 连接超时时间
+      timeout: 10s
+      lettuce:
+        pool:
+          # 连接池最大连接数
+          max-active: 200
+          # 连接池最大阻塞等待时间（使用负值表示没有限制）
+          max-wait: -1ms
+          # 连接池中的最大空闲连接
+          max-idle: 10
+          # 连接池中的最小空闲连接
+          min-idle: 0
+
+  springdoc:
+    api-docs:
+      enabled: true # 开启OpenApi接口
+    swagger-ui:
+      enabled: true # 开启swagger界面，依赖OpenApi，需要OpenApi同时开启
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+#mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+############# Sa-Token 配置 (文档: https://sa-token.cc) ##############
+sa-token:
+  # token 名称（同时也是 cookie 名称）
+  token-name: Authorization
+  # token 有效期（单位：秒） 默认30天，-1 代表永久有效
+  timeout: 2592000
+  # token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
+  active-timeout: -1
+  # 是否允许同一账号多地同时登录 （为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
+  is-concurrent: true
+  # 在多人登录同一账号时，是否共用一个 token （为 true 时所有登录共用一个 token, 为 false 时每次登录新建一个 token）
+  is-share: true
+  # token 风格（默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik）
+  token-style: random-128
+  # 是否输出操作日志
+  is-log: false
+  is-read-cookie: false
+
+files:
+  upload:
+    path: D:\files\
+    #访问前缀
+    urlprefix: http://localhost:9090/api/file/
+    #压缩比例
+    outputquality: 1
+
+
+xss:
+  enabled: true         # 是否开启XSS防护
+  mode: CLEAN           # CLEAN = 使用Jsoup清洗，ESCAPE = 替换特殊字符
+  excludes:
+
+  url-patterns:
+    - /*
+alipay:
+  appId: 9021000140662948
+  merchantPrivateKey: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCw9f/dJvZb9RbRK8r9lELcEATBbTkSWf88kG9GGeKryklp8u0Kv2FkpAtXcAPdhKTmxJQ0AYAhyU588nUiuvD89YWVK4kYNMKPxgKvFDHsHYf73yefGmXonZD3fI/vgAufVRghoAloasODL/oZaiRy/jQy/vFQekiyI0zuj4TNCDV/UzPw6apBTtI5pCr8wjHlHpjLRvP7aeLqK9ylAXV1w0ApVEEQRCpCmek8qy3oNQ8z0TOniaq+AwYiRNdqRXrOIIoCOGhS0b/TgWrznhzraQf6UMF6wJuQWhs6mZ4aKBmeweVzYCSNnJUx9SKyvxix1SpCc98dzIQKLYL4jek/AgMBAAECggEALz9fM1Ll0COeFfcVWaMuPsdgHazl4gp5ZVhC/XqH1MpL06fytj3m6RILnSrhPVHfHWY7E6+a4Gp5NE8gC0fSdBextORM1FOx5uU9bjV8JsizuAIa+BX6Q6NeQ1XUsGOFtuLncILkQCbRUMOMiSCX3sQUd9Et6QjdRAK81a0oDf3CckIyMmezHhQj/yNu0DO1PSNniVfn0MnepFuqgjjUAOWwIxZJOkK/3VrVx+X0k1t4zCWnZbLty8XdIrUjJR1NSQPIiRPAytvsgozrRXV10SDZR7MrQxiHg7GE+tF16lCbPXSghIaotXnfLetXuy2Uar4MxDu6oQFkHVWkov6T8QKBgQDzCKGBX3cXkZr0QunGJLcAtBqseSOLTAo6sqg9IwpZia2gVMWGVwxvp2TrTI1Do9P4UnHoJuj4eqPUfYGDV55fRpbX8Be7eXXFqOJqhUMg3JA/UCTPCB5WlGESlSzbp3jHa3WF4Ik32qPMUI5Bx9rfkIrNGQkCsVGVmd4u+qddqwKBgQC6ZvFNnFV+u+LFP8zFLL7FnhbJSPzqGBKBagNkFM3ZNlojI9jmbkCuSTz2pDCTjJBuOn463Noc4MxZ/EbxuYTO8zrnV3EGwfC/K5/S1nQZxy2aoUUY1WuaGYo+ZIxDKwwrz0m2BX6CtzTCVEVZ5uwSJn31E/3S50HE780mCyNGvQKBgF+QY0Fl8oRYAuBNd3MseLFUILD1KV7a1aLjIXh40NcIZjeHXexHSmKVJf/IKDwSrYUVlii9NBqQzt79QvIMf//i1+mtRQe46PCCShWstQq08BuVPgQSoytUSR9vfSYaIkn4HUw5UHugA4yRmH6RQaVrRskDMSHX68axrEY41ZrlAoGBAK5G9TFVC3JUhG9beT6Y2Ty21CMZxK2yGAs7bTQzZ0rA0IGuUGsRhhPtkbwgQvKRJ7CHq+Go/5ykaStw/XufspYzP01wqdJhnY9/YAymSSKY4QCD67COSe5oFqLDK4jZRKXpRseSV3grhn5yf+zQRMOrjXSIXnbDlPBmLG53V2IZAoGBALnuKheYqE2LIJ0edP9KyGadj2A5YII88jO+qDSxh+qTPMHEB25bVYYosn7Bpfl1ecPkbmz1Ef5ysslvhVt9y3R+qrd5fTVUYPtqEQ0T9dgM33R0sFsIbRFbCa2jJ0tbG6OEWUmebDg1kyTbVmx1gTZbdfR5MlASqs2VoLJy5yeg
+  alipayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhTdrraysqB7c8f0ItK0sSOYb7wPRgwNaROaG7w4N0nEeMFio0AGZJzB4/Fw6iwkaKQkmSToFz+vCKplDl7d/WlG4Vl7xLKPh835KnaWv4HQZUFhq7mEdbc1gKuyqB44SXWxUXSO7jD/l/X6ju69WWgwEY/mjPM8pCCxEQ0QmOheEHeYh/q52skSnDgQdBo55oEwRqOv/zZ2LCwa/BzJaUN2NanF/b2WFiTNCUI1M6vJBEnqZdsW6ORBhID3G/HKIwDogIswV8P/EqK0kXb168hUNZJSP6WAL5AqMN6AkaTOSik69XV1cjEFnaBTMibqlO4/UozeR5CqEMEVvFoTNdwIDAQAB
+  notifyUrl: http://cc23456.natapp1.cc/api/alipay/notify

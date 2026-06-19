@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:RecordServiceImpl
- * @description:  service实现类
+ * @description: service实现类
  * @author:dyy
  * @Version 3.0
  **/
 @Service
-        public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record>implements RecordService {
+public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> implements RecordService {
 
-        }
+}

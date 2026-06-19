@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:RolePermission
  * @description: 角色菜单表 实体类
  * @author:dyy

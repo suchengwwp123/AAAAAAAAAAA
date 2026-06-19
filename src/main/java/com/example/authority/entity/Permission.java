@@ -14,7 +14,7 @@ import java.util.List;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:Permission
  * @description: 菜单表 实体类
  * @author:dyy

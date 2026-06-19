@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName: RolePermissionService
  * @description: 角色菜单表 service
  * @author:dyy

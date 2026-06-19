@@ -17,7 +17,7 @@
               'filter blur-[10px] invert dark:invert-0 pointer-events-none absolute -inset-[10px] opacity-50 will-change-transform;',
               '[--white-gradient:repeating-linear-gradient(100deg,var(--white)_0%,var(--white)_7%,var(--transparent)_10%,var(--transparent)_12%,var(--white)_16%)]',
               '[--dark-gradient:repeating-linear-gradient(100deg,var(--black)_0%,var(--black)_7%,var(--transparent)_10%,var(--transparent)_12%,var(--black)_16%)]',
-              '[--aurora:repeating-linear-gradient(100deg,var(--blue-500)_10%,var(--indigo-300)_15%,var(--blue-300)_20%,var(--violet-200)_25%,var(--blue-400)_30%)]',
+              '[--aurora:repeating-linear-gradient(100deg,var(--teal-400)_10%,var(--cyan-300)_15%,var(--sky-300)_20%,var(--emerald-300)_25%,var(--teal-500)_30%)]',
               '[background-image:var(--white-gradient),var(--aurora)] dark:[background-image:var(--dark-gradient),var(--aurora)] [background-size:300%,_200%] [background-position:50%_50%,50%_50%]',
               'aurora-background-gradient-after',
               'aurora-gradient-animation',
@@ -47,14 +47,14 @@
            {{login_name}}
           </div>
           <div class="py-4 text-base font-extralight md:text-3xl dark:text-neutral-100">
-           基于SpringBoot+Vue架构,一键生成前后端代码、数据库表、接口文档。
+{{system_about_name}}
           </div>
-          <button
-              @click="handleDoc"
-              class="w-fit rounded-full bg-black px-4 py-2 text-white dark:bg-white dark:text-black"
-          >
-            立即开始
-          </button>
+<!--          <button-->
+<!--              @click="handleDoc"-->
+<!--              class="w-fit rounded-full bg-black px-4 py-2 text-white dark:bg-white dark:text-black"-->
+<!--          >-->
+<!--            立即开始-->
+<!--          </button>-->
         </Motion>
       </AuroraBackground>
     </div>
@@ -69,10 +69,11 @@ import {ref} from "vue";
 const props = withDefaults(defineProps(), {
   radialGradient: true,
 });
-const handleDoc=()=>{
-window.open(`https://www.yuque.com/kouding-nkkg8/rimn7l/go99e6iel59lwbpc?singleDoc# 《authority代码生成器使用教程》 密码：xybd`)
-}
+// const handleDoc=()=>{
+// window.open(`https://www.yuque.com/kouding-nkkg8/rimn7l/go99e6iel59lwbpc?singleDoc# 《authority代码生成器使用教程》 密码：xybd`)
+// }
 const login_name=import.meta.env.VITE_LOGIN_NAME
+const system_about_name=import.meta.env.VITE_ABOUT_NAME
 </script>
 
 <style scoped>
@@ -92,15 +93,25 @@ const login_name=import.meta.env.VITE_LOGIN_NAME
 }
 
 @keyframes animate-aurora {
-  0% {
+  0%, 100% {
     background-position:
         50% 50%,
         50% 50%;
   }
-  100% {
+  25% {
     background-position:
-        350% 50%,
-        350% 50%;
+        150% 30%,
+        120% 40%;
+  }
+  50% {
+    background-position:
+        250% 60%,
+        200% 70%;
+  }
+  75% {
+    background-position:
+        150% 80%,
+        120% 60%;
   }
 }
 </style>

@@ -46,12 +46,14 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:AuthController
  * @description: 认证处理控制器
  * @author:dyy
  * @Version 3.0
  **/
+
+//"/auth/login"
 @Tag(name = "认证授权 前端控制器")
 @RestController
 @RequestMapping("/auth")
@@ -132,7 +134,9 @@ public class AuthController {
         // 第3步通知在线用户
         WebSocketHandler.broadcastToChannel(Subscription.ONLINEUSER_TAKE.name(), JSONUtil.toJsonStr(SaResult.ok()));
         // 第4步，返回给前端
-        return SaResult.data(tokenInfo);
+
+        return SaResult.data(MapUtil.builder().put("tokenInfo",tokenInfo).put("roleList",StpUtil.getRoleList()).build());
+
 
     }
 

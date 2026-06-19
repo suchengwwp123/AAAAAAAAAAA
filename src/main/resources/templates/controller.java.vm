@@ -35,7 +35,7 @@ import ${superControllerClassPackage};
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:${table.controllerName}
  * @description: ${table.controllerName}前端控制器
  * @author:dyy

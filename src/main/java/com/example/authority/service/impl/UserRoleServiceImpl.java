@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:UserRoleServiceImpl
  * @description: 用户角色表 service实现类
  * @author:dyy

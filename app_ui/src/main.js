@@ -8,7 +8,7 @@ import '@tdesign-vue-next/chat/es/style/index.css'; // 引入chat组件的少量
 // 导入elementui
 import 'ant-design-vue/dist/reset.css';
 import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
+
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import Directive from '@/utils/index'
 import locale from 'element-plus/es/locale/lang/zh-cn'
@@ -16,9 +16,11 @@ import pinia from '@/stores/store'
 import App from './App.vue'
 import router from './router'
 import {createApp} from 'vue'
-
+import UndrawUi from 'undraw-ui'
+import 'undraw-ui/dist/style.css'
+import '@/styles/theme.scss'
 const app = createApp(App)
-
+app.use(UndrawUi)
 app.use(router)
 app.use(pinia)
 // 使用饿了么ui
@@ -32,4 +34,7 @@ app.use(Directive)
 
 app.use(Antd)
 app.use(TDesign).use(TDesignChat);
+
+
+
 app.mount('#app')

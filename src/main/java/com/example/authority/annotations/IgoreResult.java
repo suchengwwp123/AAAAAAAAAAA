@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName: IgoreResult
  * @description: 忽略返回体，也是搭配LogAspect使用的
  * @author:dyy

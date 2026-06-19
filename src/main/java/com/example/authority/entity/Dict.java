@@ -19,7 +19,7 @@ import lombok.Data;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:Dict
  * @description: 数据字典 实体类
  * @author:dyy

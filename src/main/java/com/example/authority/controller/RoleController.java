@@ -2,6 +2,7 @@ package com.example.authority.controller;
 
 import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.authority.annotations.ClearPerms;
 import com.example.authority.common.Result;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:RoleController
  * @description: RoleController前端控制器
  * @author:dyy
@@ -122,7 +123,9 @@ public class RoleController {
     @Operation(summary = "查询所有Role")
     @GetMapping
     public Result indAll() {
-        return Result.success(roleService.list());
+        return Result.success(roleService.list(
+                new LambdaUpdateWrapper<Role>().ne(Role::getId, 7L)
+        ));
     }
 
     /**

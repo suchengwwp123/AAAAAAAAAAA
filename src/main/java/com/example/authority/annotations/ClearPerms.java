@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName: ClearPerms
  * @description: 清除权限
  * @author:dyy

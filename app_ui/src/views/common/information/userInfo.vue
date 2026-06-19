@@ -14,7 +14,7 @@ const ruleForm = reactive(userInfo)
 
 const rules = reactive({
   nickname: [
-    { required: true, message: '输入用户昵称', trigger: 'blur' },
+    { required: true, message: '输入用户姓名', trigger: 'blur' },
     { min: 2, max: 5, message: '长度在2到5位之间', trigger: 'blur' }
   ],
   phone: [
@@ -112,7 +112,7 @@ export default {
         <el-form-item label="账户名称" prop="username">
           <el-input v-model="ruleForm.username" disabled />
         </el-form-item>
-        <el-form-item label="用户昵称" prop="nickname">
+        <el-form-item label="用户姓名" prop="nickname">
           <el-input v-model="ruleForm.nickname" />
         </el-form-item>
         <el-form-item label="手机号码" prop="phone">

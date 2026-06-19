@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:PermissionServiceImpl
  * @description: 菜单表 service实现类
  * @author:dyy
@@ -34,16 +34,16 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements PermissionService {
-//    注入RolePermissionService属性
+    //    注入RolePermissionService属性
     @Resource
     private RolePermissionService rolePermissionService;
-//    注入UserRoleService属性
+    //    注入UserRoleService属性
     @Resource
     private UserRoleService userRoleService;
-//    注入RedisUtils属性
+    //    注入RedisUtils属性
     @Resource
     private RedisUtils redisUtils;
-//    注入RoleService属性
+    //    注入RoleService属性
     @Resource
     private RoleService roleService;
 
@@ -96,7 +96,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
             //        通过UserRoleService获取到该名User的RoleID集合
             List<Long> roleIds = userRoleService.getRoleIds(loginId, loginType);
             //         通过RoleService找到Id在ROleID集合中且Statu=1L的Role集合
-            if (roleIds.size()==0){
+            if (roleIds.size() == 0) {
                 return new ArrayList<>();
             }
             List<Role> roles = roleService.list(new LambdaQueryWrapper<Role>().in(Role::getId, roleIds).eq(Role::getStatu, 1L));

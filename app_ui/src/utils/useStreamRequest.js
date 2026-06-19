@@ -2,7 +2,7 @@
 
 import pinia from "@/stores/store";
 import useSystemStore from "@/stores/system";
-
+const api=import.meta.env.VITE_API_URL
 let controller = null; // 全局变量保存 controller 实例
 
 const systemStore = useSystemStore(pinia)
@@ -10,7 +10,7 @@ export async function streamRequest(modelType, prompt, deepThink, onDelta, onFin
     controller = new AbortController();
 
     try {
-        const response = await fetch(`http://localhost:9090/api/ai/stream/${encodeURIComponent(modelType)}/${encodeURIComponent(prompt)}/${encodeURIComponent(deepThink)}`, {
+        const response = await fetch(`${api}/ai/stream/${encodeURIComponent(modelType)}/${encodeURIComponent(prompt)}/${encodeURIComponent(deepThink)}`, {
             method: 'GET',
             signal: controller.signal,
             headers: {

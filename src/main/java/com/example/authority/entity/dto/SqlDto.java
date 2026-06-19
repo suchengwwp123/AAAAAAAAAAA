@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:SqlDto
  * @description: SQL语句构建类
  * @author:dyy

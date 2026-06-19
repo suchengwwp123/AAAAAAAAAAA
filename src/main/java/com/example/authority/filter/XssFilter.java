@@ -11,11 +11,14 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Component
+
 public class XssFilter implements Filter {
 
-    @Autowired
-    private XssProperties xssProperties;
+    private final XssProperties xssProperties;
+
+    public XssFilter(XssProperties xssProperties) {
+        this.xssProperties = xssProperties;
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

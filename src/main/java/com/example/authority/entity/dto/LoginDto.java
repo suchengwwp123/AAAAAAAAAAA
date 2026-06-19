@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:LoginDto
  * @description: 接收登录数据的实体类
  * @author:dyy

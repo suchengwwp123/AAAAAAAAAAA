@@ -1,19 +1,45 @@
 package com.example.authority.utils;
 
+import cn.hutool.core.io.resource.ClassPathResource;
+
 import javax.crypto.Cipher;
-import java.security.*;
+import java.io.File;
+import java.nio.file.Files;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
+/**
+ * 密钥工具类
+ * @author authority
+ */
 public class RSAUtil {
 
-    // 生成密钥对
-    public static KeyPair generateKeyPair() throws NoSuchAlgorithmException {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        keyPairGenerator.initialize(2048);
-        return keyPairGenerator.generateKeyPair();
+    /**
+     * 配置密钥对
+     * @return
+     * @throws Exception
+     */
+    public static KeyPair generateKeyPair() throws Exception {
+        // 读取公钥
+        String publicKeyStr = Files.readString(
+                new ClassPathResource("rsa/public.key").getFile().toPath()
+        );
+        PublicKey publicKey = getPublicKey(publicKeyStr);
+
+        // 读取私钥
+        String privateKeyStr = Files.readString(
+                new ClassPathResource("rsa/private.key").getFile().toPath()
+        );
+        PrivateKey privateKey = getPrivateKey(privateKeyStr);
+
+        return new KeyPair(publicKey, privateKey);
     }
+
 
     // 公钥加密
     public static String encrypt(String data, PublicKey publicKey) throws Exception {
@@ -45,5 +71,33 @@ public class RSAUtil {
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         return keyFactory.generatePrivate(spec);
+    }
+
+    /**
+     * 更新公钥和密钥
+     * @param args
+     * @throws Exception
+     */
+    public static void main(String[] args) throws Exception {
+        // 生成密钥对
+        KeyPair keyPair = RSAUtil.generateKeyPair();
+
+        // 指定 resources/rsa 路径（如果不存在就创建）
+        File rsaDir = new File("src/main/resources/rsa");
+        if (!rsaDir.exists()) {
+            rsaDir.mkdirs();
+        }
+
+        // 保存公钥
+        String publicKeyStr = Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded());
+        Files.writeString(new File(rsaDir, "public.key").toPath(), publicKeyStr);
+
+        // 保存私钥
+        String privateKeyStr = Base64.getEncoder().encodeToString(keyPair.getPrivate().getEncoded());
+        Files.writeString(new File(rsaDir, "private.key").toPath(), privateKeyStr);
+
+        System.out.println("RSA 密钥文件生成完成！");
+        System.out.println("公钥: " + new File(rsaDir, "public.key").getAbsolutePath());
+        System.out.println("私钥: " + new File(rsaDir, "private.key").getAbsolutePath());
     }
 }

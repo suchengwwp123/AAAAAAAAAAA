@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:RolePermissionServiceImpl
  * @description: 角色菜单表 service实现类
  * @author:dyy
  * @Version 3.0
  **/
 @Service
-        public class RolePermissionServiceImpl extends ServiceImpl<RolePermissionMapper, RolePermission>implements RolePermissionService {
+public class RolePermissionServiceImpl extends ServiceImpl<RolePermissionMapper, RolePermission> implements RolePermissionService {
 
-        }
+}

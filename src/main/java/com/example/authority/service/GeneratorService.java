@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName: GeneratorService
  * @description: 代码生成器 GeneratorService
  * @author:dyy

@@ -46,9 +46,9 @@ public class WebSocketHandler extends TextWebSocketHandler {
             }
         }
 
-        if (channelId == null || channelId.trim().isEmpty()||!isValidChannel(channelId)) {
-           session.close();
-           return;
+        if (channelId == null || channelId.trim().isEmpty() || !isValidChannel(channelId)) {
+            session.close();
+            return;
         }
 
         // 绑定 session 到频道集合
@@ -134,6 +134,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     /**
      * 向频道里某个用户发送消息
+     *
      * @param channelId
      * @param userId
      * @param message
@@ -155,6 +156,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
             }
         }
     }
+
     /**
      * 检查频道名是否在订阅枚举中
      */
@@ -166,7 +168,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
             return false;
         }
     }
-
 
 
 }

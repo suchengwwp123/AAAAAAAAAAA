@@ -54,6 +54,7 @@ const rules = reactive({
   ]
 })
 //登录方法
+//登录方法
 const submitForm = async (formEl) => {
   if (!formEl) return
   formEl.validate(async (valid, fields) => {
@@ -69,13 +70,17 @@ const submitForm = async (formEl) => {
         Object.assign(submitData, ruleForm)
         submitData.password = encrypted
         const res = await request.post('/auth/login', submitData)
-        systemStore.setToken(res.data.tokenValue)
+        systemStore.setToken(res.data.tokenInfo.tokenValue)
         ElNotification({
           title: '登录成功',
           message: `${ruleForm.username} 欢迎您!`,
           type: 'success'
         })
-        $router.replace('/')
+        if (res.data.roleList.includes('user')){
+          $router.replace('/front')
+        }else{
+          $router.replace('/')
+        }
       } catch (error) {
         await initRsa()
         await getCaptcha()

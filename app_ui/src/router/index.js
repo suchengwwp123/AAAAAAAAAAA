@@ -20,7 +20,16 @@ NProgress.configure({
 })
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
-    routes: constrouters
+    routes: constrouters,
+    scrollBehavior(to, from, savedPosition) {
+        // 如果有保存的位置（例如浏览器后退），则返回到该位置
+        if (savedPosition) {
+            return savedPosition
+        } else {
+            // 否则滚动到顶部
+            return { top: 0, behavior: 'smooth' }
+        }
+    }
 })
 const whiteUrl = [
     '/login', '/register', '/forget'

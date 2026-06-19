@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName: HistoryService
  * @description: 聊天记录 service
  * @author:dyy

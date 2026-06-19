@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:NoticeServiceImpl
  * @description: 系统公告 service实现类
  * @author:dyy
  * @Version 3.0
  **/
 @Service
-        public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice>implements NoticeService {
+public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> implements NoticeService {
 
-        }
+}

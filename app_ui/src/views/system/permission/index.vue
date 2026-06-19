@@ -113,7 +113,7 @@ const handleDefaultExpandAll = () => {
         <el-table-column prop="perms" label="权限标识" show-overflow-tooltip />
         <el-table-column prop="component" label="组件名称" show-overflow-tooltip />
         <el-table-column prop="path" label="访问路径" show-overflow-tooltip />
-        <el-table-column prop="createTime" label="创建时间" width="160" align="center" />
+        <el-table-column prop="createTime" label="创建时间" width="160" align="center"  show-overflow-tooltip/>
 
         <el-table-column prop="hidden" label="显示状态" align="center">
           <template #default="scope">

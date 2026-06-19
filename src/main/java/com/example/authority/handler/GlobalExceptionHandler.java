@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import cn.hutool.core.io.IORuntimeException;
 
 /**
- * @program: authority-2026.0.33
+ * @program: design3
  * @ClassName:GlobalExceptionHandler
  * @description: 全局异常拦截
  * @author:dyy
@@ -57,8 +57,6 @@ public class GlobalExceptionHandler {
         SaHolder.getResponse().setStatus(HttpStatus.BAD_REQUEST.value());
         return Result.error(e.getMessage());
     }
-
-
 
 
 }

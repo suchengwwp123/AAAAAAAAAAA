@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName: DictService
  * @description: 数据字典 service
  * @author:dyy

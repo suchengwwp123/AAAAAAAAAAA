@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:SystemInformationController
  * @description: 系统参数控制器
  * @author:dyy

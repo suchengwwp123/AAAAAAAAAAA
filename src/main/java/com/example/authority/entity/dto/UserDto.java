@@ -25,7 +25,7 @@ public class UserDto {
     @Schema(title = "账户名")
     private String username;
 
-    @Schema(title = "昵称")
+    @Schema(title = "姓名")
     private String nickname;
 
     @Schema(title = "头像")

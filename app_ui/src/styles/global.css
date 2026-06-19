@@ -1,4 +1,3 @@
-
 /*弹框自定义样式*/
 .el-drawer {
 
@@ -6,6 +5,7 @@
     .el-drawer__footer {
         padding: 0px;
         border-top: 1px solid #f0f0f0; /* 顶部浅灰色细线 */
+
         .el-drawer__footer-container--line {
             padding: 10px;
         }
@@ -16,9 +16,10 @@
 /*表格通用样式*/
 .page {
 
-    /*.el-select{*/
-    /*    min-width: 200px!important;*/
-    /*}*/
+    .el-select {
+        min-width: 200px !important;
+    }
+
     /**
     查询表单外边距统一样式
      */

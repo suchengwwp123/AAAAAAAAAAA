@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:HistoryServiceImpl
  * @description: 聊天记录 service实现类
  * @author:dyy
  * @Version 3.0
  **/
 @Service
-        public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History>implements HistoryService {
+public class HistoryServiceImpl extends ServiceImpl<HistoryMapper, History> implements HistoryService {
 
-        }
+}

@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:UserRole
  * @description: 用户角色表 实体类
  * @author:dyy

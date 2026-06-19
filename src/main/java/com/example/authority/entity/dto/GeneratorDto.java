@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName:GeneratorDto
  * @description: 代码生成器需要的实体类
  * @author:dyy

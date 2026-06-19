@@ -5,7 +5,7 @@ import ${superServiceClassPackage};
 
 
 /**
- * @program: authority-2026.0.3
+ * @program: design
  * @ClassName: ${table.serviceName}
  * @description: $!{table.comment} service
  * @author:dyy

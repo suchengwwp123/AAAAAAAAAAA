@@ -7,6 +7,7 @@ import router from '@/router'
 import 'nprogress/nprogress.css'
 import {useRequestThrottleStore} from '@/stores/request'
 import NProgress from "nprogress";
+
 const $router = router
 const systemStore = useSystemStore(pinia)
 /**
@@ -15,8 +16,7 @@ const systemStore = useSystemStore(pinia)
  */
 const whiteList = [
     '/user/onlinepage',
-
-
+    '/file/upload'
 
 
 ]
@@ -38,12 +38,12 @@ const requestThrottleStore = useRequestThrottleStore()
 const generateReqKey = (config) => `${config.method}&${config.url}`
 
 
-
 // ✅ 请求拦截器
 request.interceptors.request.use((config) => {
 
     // ✅ 加 token
     if (systemStore.token) {
+      // console.log(systemStore.token)
         config.headers.Authorization = systemStore.token
     }
     // ✅ 判断是否跳过防抖
@@ -51,12 +51,12 @@ request.interceptors.request.use((config) => {
     // ✅ 判断是否命中白名单
     const isWhiteListed = whiteList.some((path) => config.url?.includes(path))
     NProgress.start()
-    if (!isWhiteListed) {
-        // ✅ 非白名单接口，做请求节流判断
-        if (!requestThrottleStore.canRequest(key, 500)) {
-            return Promise.reject(new axios.Cancel('请求过于频繁，已被取消'))
-        }
-    }
+    // if (!isWhiteListed) {
+    //     // ✅ 非白名单接口，做请求节流判断
+    //     if (!requestThrottleStore.canRequest(key, 500)) {
+    //         return Promise.reject(new axios.Cancel('请求过于频繁，已被取消'))
+    //     }
+    // }
     return config
 })
 
@@ -66,9 +66,7 @@ request.interceptors.response.use(
         NProgress.done()
         if (response.data instanceof Blob) {
             return response
-        }
-
-        if (response.data.code === 200) {
+        } else if (response.data.code === 200) {
             return response.data
         } else {
             showErrorMessage(response.data.msg || '系统异常，请联系管理员！')
@@ -78,18 +76,14 @@ request.interceptors.response.use(
     (error) => {
 
         NProgress.done()
-        if (axios.isCancel(error)) {
-            showErrorMessage('请求过于频繁，请稍后再试！')
-            return Promise.reject(error.message)
-        }
 
-        console.log( error)
+
+        console.log(error)
         // 超时处理
-        if(error.code === 'ECONNABORTED' || error.message ===   "Network Error" ||  error.message.includes("timeout")){
+        if (error.code === 'ECONNABORTED' || error.message === "Network Error" || error.message.includes("timeout")) {
             showErrorMessage('请求超时，请检查网络或稍后再试！')
             return Promise.reject('请求超时')
         }
-
 
 
         const status = error.response.status
