@@ -51,7 +51,8 @@ spring:
         deny:
   data:
     redis:
-      database: 1
+      url: ${REDIS_URL:}
+      database: 0
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD:}
