@@ -56,7 +56,7 @@ spring:
       lettuce:
         pool:
           max-active: 200
-          max-wait: -1ms
+          max-wait: 3000ms
           max-idle: 10
           min-idle: 0
   mail:
