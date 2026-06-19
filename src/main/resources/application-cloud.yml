@@ -51,13 +51,15 @@ spring:
         deny:
   data:
     redis:
-      url: ${REDIS_URL:}
+      host: ${REDIS_HOST:redis.railway.internal}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
       timeout: 10s
       lettuce:
         pool:
-          max-active: 200
+          max-active: 8
           max-wait: 3000ms
-          max-idle: 10
+          max-idle: 4
           min-idle: 0
   mail:
     host: smtp.qq.com
