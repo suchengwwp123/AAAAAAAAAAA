@@ -167,10 +167,11 @@
             <version>1.36.0</version>
         </dependency>
 
-        <!-- Spring Data Redis (编译时需要，cloud环境通过exclude禁用自动配置) -->
+        <!-- Sa-Token 整合 Redis （使用 jackson 序列化方式） -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-redis-jackson</artifactId>
+            <version>1.36.0</version>
         </dependency>
         <!--密码加密工具包        -->
         <dependency>
