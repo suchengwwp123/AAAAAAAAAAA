@@ -16,6 +16,10 @@ spring:
       chat:
         options:
           max-tokens: 3000
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:hosp}?allowPublicKeyRetrieval=true&useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
@@ -49,18 +53,6 @@ spring:
         login-password: druid
         allow: 127.0.0.1
         deny:
-  data:
-    redis:
-      host: ${REDIS_HOST:thomas.proxy.rlwy.net}
-      port: ${REDIS_PORT:28688}
-      password: ${REDIS_PASSWORD:REDIS_PASSWORD_REPLACED}
-      timeout: 10s
-      lettuce:
-        pool:
-          max-active: 8
-          max-wait: 3000ms
-          max-idle: 4
-          min-idle: 0
   mail:
     host: smtp.qq.com
     username: 1874121406@qq.com
