@@ -23,9 +23,9 @@ spring:
       - cn.dev33.satoken.redis.SaTokenRedisJacksonConfig
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:hosp}?allowPublicKeyRetrieval=true&useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
-    username: ${MYSQL_USER:authority}
-    password: ${MYSQL_PASSWORD:MYSQL_PASSWORD_OLD}
+    url: jdbc:mysql://${MYSQL_HOST:thomas.proxy.rlwy.net}:${MYSQL_PORT:30171}/${MYSQL_DATABASE:railway}?allowPublicKeyRetrieval=true&useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:MYSQL_PASSWORD_REPLACED}
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       initial-size: 5
