@@ -69,8 +69,8 @@ public class RedisUtils {
         if (expireTime == null) {
             return -1;
         }
-        long剩余 = expireTime - System.currentTimeMillis();
-        return剩余 > 0 ?剩余 / 1000 : 0;
+        long remaining = expireTime - System.currentTimeMillis();
+        return remaining > 0 ? remaining / 1000 : 0;
     }
 
     /**
