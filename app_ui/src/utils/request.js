@@ -44,7 +44,7 @@ request.interceptors.request.use((config) => {
     // ✅ 加 token
     if (systemStore.token) {
       // console.log(systemStore.token)
-        config.headers.Authorization = systemStore.token
+        config.headers.satoken = systemStore.token
     }
     // ✅ 判断是否跳过防抖
     const key = generateReqKey(config)
