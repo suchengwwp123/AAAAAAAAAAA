@@ -58,6 +58,10 @@ public class SaTokenConfig implements WebMvcConfigurer {
                 .addExclude("/auth/email/**")
                 .addExclude("/auth/islogin")
                 .addExclude("/auth/findpassword/**")
+                .addExclude("/index.html")
+                .addExclude("/assets/**")
+                .addExclude("/logo.png")
+                .addExclude("/bg.jpg")
 
                 /* 排除掉 /favicon.ico /swagger-ui/***/
                 // 认证函数: 每次请求执行都会进行拦截

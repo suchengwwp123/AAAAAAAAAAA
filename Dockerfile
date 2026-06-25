@@ -4,7 +4,7 @@ WORKDIR /app
 COPY app_ui/package.json app_ui/pnpm-lock.yaml ./
 RUN npm install -g pnpm && pnpm install
 COPY app_ui/ .
-RUN pnpm build
+RUN VITE_BASE=/api/ pnpm build
 
 # Stage 2: Build backend
 FROM maven:3.9-eclipse-temurin-17 AS backend-build

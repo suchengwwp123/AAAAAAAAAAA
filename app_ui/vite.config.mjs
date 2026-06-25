@@ -18,7 +18,7 @@ export default defineConfig({
     },
   },
 
-  base:'/',
+  base: import.meta.env.VITE_BASE || '/',
   plugins: [
     vue(),
 
