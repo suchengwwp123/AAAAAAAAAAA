@@ -1,6 +1,7 @@
 package com.example.authority.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
@@ -20,9 +21,10 @@ import java.util.concurrent.TimeUnit;
  * @Version 3.0
  **/
 @Component
+@ConditionalOnProperty("spring.data.redis.host")
 public class RedisUtils {
 
-    @Autowired
+    @Autowired(required = false)
     private RedisTemplate redisTemplate;
 
     /**
